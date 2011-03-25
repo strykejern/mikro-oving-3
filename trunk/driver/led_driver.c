@@ -65,17 +65,20 @@ void LED_initialize( const unsigned int bits )
 
 static int __init driver_init (void) {
 	struct cdev *device;
+	int success;
 
 	//get memory space
 	device = cdev_alloc();
 
         printk( KERN_INFO "Initializing driver %s...\n", DRIVER_NAME );
 
+	success = alloc_chrdev_region( &device->dev, DRIVER_MINOR, 1, DRIVER_NAME);
+
 	 /* allokere device-nummer */
-	if( 0 > alloc_chrdev_region( &device->dev, DRIVER_MINOR, 1, DRIVER_NAME) )
+	if( 0 > success )
 	{
 		printk( KERN_WARNING "FAILED! could not allocate a major number\n" );
-		return -1;
+		return success;
 	}
 
 	printk( KERN_INFO "%s allocated - Major: %i, Minor: %i", DRIVER_NAME, MAJOR(device->dev), MINOR(device->dev) );
@@ -85,9 +88,11 @@ static int __init driver_init (void) {
 	if( NULL == request_region( AVR32_PIOB_ADDRESS, 0x78, DRIVER_NAME ) )
 	{
 		printk( KERN_WARNING "FAILED! could not request region\n" );
-		return -1;		
 	}
-	printk( KERN_INFO "Success! managed to request the region\n" );
+	else
+	{
+		printk( KERN_INFO "Success! managed to request the region\n" );
+	}
   
  	 /* initialisere PIO-maskinvaren (som i øving 2) */
 	LED_initialize( 0xFF );
@@ -98,7 +103,8 @@ static int __init driver_init (void) {
 	//register_chrdev_region( device, 1, DRIVER_NAME )
 	device->ops = &driver_fops;
 	device->owner = THIS_MODULE;
-	if( cdev_add(device, device->dev, 1) < 0 )
+	success = cdev_add(device, device->dev, 1);
+	if( success < 0 )
 	{
 		printk( KERN_WARNING "FAILED! could not register device\n" );
 		return -1;
@@ -106,7 +112,7 @@ static int __init driver_init (void) {
 	
 	printk( KERN_INFO "Success! Finished loading driver\n" );
 
-  	return 0;
+  	return success;
 }
 
 /*****************************************************************************/
