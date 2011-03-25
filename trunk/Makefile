@@ -1,6 +1,4 @@
 #Simple makefile for assignment 3
-BINARY = main.elf
-
 
 #Upload the bootloader
 bootload:
