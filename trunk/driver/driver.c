@@ -18,6 +18,8 @@
 
 /* prototyper */
 
+static volatile avr32_pio_t *pioc = &AVR32_PIOC;	//LED
+
 static int __init driver_init(void);
 static void __exit driver_exit(void);
 static int driver_open (struct inode *inode, struct file *filp);
@@ -37,25 +39,41 @@ static struct file_operations driver_fops = {
   .release = driver_release
 };
 
+/** This function initializes the LED lamps **/
+void LED_initialize( const unsigned int bits ) 
+{
+	//Enable LED
+	pioc->per = bits;		//Register enable
+	pioc->oer = bits;		//Output enable
+
+	//Disable leds that arent used
+	pioc->pdr = ~bits;
+}
+
 /*****************************************************************************/
 /* init-funksjon (kalles når modul lastes) */
 
 static int __init driver_init (void) {
-  /* allokere device-nummer */
 
-  /* be om tilgang til I/O-porter */
+	 /* allokere device-nummer */
+	//alloc_chrdev_region()
+
+ 	 /* be om tilgang til I/O-porter */
+	//request_region();
   
-  /* initialisere PIO-maskinvaren (som i øving 2) */
+ 	 /* initialisere PIO-maskinvaren (som i øving 2) */
+	LED_initialize( 0xFF );
  
-  /* registrere device i systemet (må gjøres når alt annet er initialisert) */
+  	/* registrere device i systemet (må gjøres når alt annet er initialisert) */
 
-  return 0;
+  	return 0;
 }
 
 /*****************************************************************************/
 /* exit-funksjon (kalles når modul fjernes fra systemet) */
 
 static void __exit driver_exit (void) {
+
 }
 
 /*****************************************************************************/
