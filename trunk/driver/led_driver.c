@@ -17,6 +17,9 @@
 #include "ap7000.h"
 
 /* prototyper */
+static const char * DRIVER_NAME = "led_driver";
+static const int DRIVER_MAJOR = 1;
+static const int DRIVER_MINOR = 0;
 
 static volatile avr32_pio_t *pioc = &AVR32_PIOC;	//LED
 
@@ -61,20 +64,47 @@ void LED_initialize( const unsigned int bits )
 /* init-funksjon (kalles når modul lastes) */
 
 static int __init driver_init (void) {
+	struct cdev *device;
 
-        printk( KERN_INFO "Initializing custom LED driver...\n" );
+	//get memory space
+	device = cdev_alloc();
+
+        printk( KERN_INFO "Initializing driver %s...\n", DRIVER_NAME );
 
 	 /* allokere device-nummer */
-	//alloc_chrdev_region()
+	if( 0 > alloc_chrdev_region( &device->dev, DRIVER_MINOR, 1, DRIVER_NAME) )
+	{
+		printk( KERN_WARNING "FAILED! could not allocate a major number\n" );
+		return -1;
+	}
+
+	printk( KERN_INFO "%s allocated - Major: %i, Minor: %i", DRIVER_NAME, MAJOR(device->dev), MINOR(device->dev) );
+
 
  	 /* be om tilgang til I/O-porter */
-	//request_region();
+	if( NULL == request_region( AVR32_PIOB_ADDRESS, 0x78, DRIVER_NAME ) )
+	{
+		printk( KERN_WARNING "FAILED! could not request region\n" );
+		return -1;		
+	}
+	printk( KERN_INFO "Success! managed to request the region\n" );
   
  	 /* initialisere PIO-maskinvaren (som i øving 2) */
 	LED_initialize( 0xFF );
 	LED_set_enabled( 0x0F );
  
+
   	/* registrere device i systemet (må gjøres når alt annet er initialisert) */
+	//register_chrdev_region( device, 1, DRIVER_NAME )
+	device->ops = &driver_fops;
+	device->owner = THIS_MODULE;
+	if( cdev_add(device, device->dev, 1) < 0 )
+	{
+		printk( KERN_WARNING "FAILED! could not register device\n" );
+		return -1;
+	}
+	
+	printk( KERN_INFO "Success! Finished loading driver\n" );
 
   	return 0;
 }
@@ -83,7 +113,7 @@ static int __init driver_init (void) {
 /* exit-funksjon (kalles når modul fjernes fra systemet) */
 
 static void __exit driver_exit (void) {
-
+	//unregister_chrdev_region( dev_t first, unsigned int count )
 }
 
 /*****************************************************************************/
@@ -120,7 +150,7 @@ module_init (driver_init);  /* angir hva som er init-funksjon */
 module_exit (driver_exit);  /* angir hva som er exit-funksjon */
 
 MODULE_LICENSE ("GPL");     /* programlisens for modulen */
-MODULE_DESCRIPTION ("");    /* tekstlig beskrivelse */
-MODULE_VERSION ("");        /* versjonsnummer */
-MODULE_AUTHOR ("");         /* forfatter(e) */
+MODULE_DESCRIPTION ("LED Drivers");    /* tekstlig beskrivelse */
+MODULE_VERSION ("1.00");        /* versjonsnummer */
+MODULE_AUTHOR ("Johan Jansen and Anders Eie");         /* forfatter(e) */
 
