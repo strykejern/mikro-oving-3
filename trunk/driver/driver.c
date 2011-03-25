@@ -55,6 +55,8 @@ void LED_initialize( const unsigned int bits )
 
 static int __init driver_init (void) {
 
+        printk( KERN_INFO "Initializing custom LED driver...\n" );
+
 	 /* allokere device-nummer */
 	//alloc_chrdev_region()
 
