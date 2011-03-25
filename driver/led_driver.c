@@ -81,7 +81,7 @@ static int __init driver_init (void) {
 		return success;
 	}
 
-	printk( KERN_INFO "%s allocated - Major: %i, Minor: %i", DRIVER_NAME, MAJOR(device->dev), MINOR(device->dev) );
+	printk( KERN_INFO "%s allocated - Major: %i, Minor: %i\n", DRIVER_NAME, MAJOR(device->dev), MINOR(device->dev) );
 
 
  	 /* be om tilgang til I/O-porter */
@@ -120,6 +120,7 @@ static int __init driver_init (void) {
 
 static void __exit driver_exit (void) {
 	//unregister_chrdev_region( dev_t first, unsigned int count )
+	//release_region( unsigned long start, unsigned long end )
 }
 
 /*****************************************************************************/
