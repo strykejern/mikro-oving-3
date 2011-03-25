@@ -39,6 +39,13 @@ static struct file_operations driver_fops = {
   .release = driver_release
 };
 
+/** Use this function to enable the LED specified in the BITFIELD **/
+void LED_set_enabled( const unsigned int bits ) 
+{
+	pioc->codr = ~bits;
+	pioc->sodr = bits;
+}
+
 /** This function initializes the LED lamps **/
 void LED_initialize( const unsigned int bits ) 
 {
@@ -65,6 +72,7 @@ static int __init driver_init (void) {
   
  	 /* initialisere PIO-maskinvaren (som i øving 2) */
 	LED_initialize( 0xFF );
+	LED_set_enabled( 0x0F );
  
   	/* registrere device i systemet (må gjøres når alt annet er initialisert) */
 
