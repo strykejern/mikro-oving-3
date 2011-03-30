@@ -17,7 +17,7 @@
 #include "ap7000.h"
 
 /* prototyper */
-static const char * DRIVER_NAME = "led_driver";
+static const char * DRIVER_NAME = "stk1000_led_and_button_driver";
 static const int DRIVER_MAJOR = 1;
 static const int DRIVER_MINOR = 0;
 
@@ -62,9 +62,9 @@ void LED_initialize( const unsigned int bits )
 
 /*****************************************************************************/
 /* init-funksjon (kalles når modul lastes) */
+static struct cdev *device;
 
 static int __init driver_init (void) {
-	struct cdev *device;
 	int success;
 
 	//get memory space
@@ -119,8 +119,9 @@ static int __init driver_init (void) {
 /* exit-funksjon (kalles når modul fjernes fra systemet) */
 
 static void __exit driver_exit (void) {
-	//unregister_chrdev_region( dev_t first, unsigned int count )
-	//release_region( unsigned long start, unsigned long end )
+	cdev_del( device );
+	//unregister_chrdev_region( device->dev, DRIVER_MINOR );
+	//release_region( device->dev, 0x78 );
 }
 
 /*****************************************************************************/
@@ -157,7 +158,7 @@ module_init (driver_init);  /* angir hva som er init-funksjon */
 module_exit (driver_exit);  /* angir hva som er exit-funksjon */
 
 MODULE_LICENSE ("GPL");     /* programlisens for modulen */
-MODULE_DESCRIPTION ("LED Drivers");    /* tekstlig beskrivelse */
+MODULE_DESCRIPTION ("STK1000 LED and Button Drivers");    /* tekstlig beskrivelse */
 MODULE_VERSION ("1.00");        /* versjonsnummer */
 MODULE_AUTHOR ("Johan Jansen and Anders Eie");         /* forfatter(e) */
 
