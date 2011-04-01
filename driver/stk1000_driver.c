@@ -179,11 +179,11 @@ static ssize_t driver_read (struct file *filp, char __user *buff,
 	if ( (~piob->pdsr) & 1 ) buttons += 1;
 	if ( (~piob->pdsr) & 2 ) buttons += 2;
 	if ( (~piob->pdsr) & 4 ) buttons += 4;
-	if ( (~piob->pdsr) & 64 ) buttons += 8;
-	if ( (~piob->pdsr) & 128 ) buttons += 16;
-	if ( (~piob->pdsr) & 256 ) buttons += 32;
-	if ( (~piob->pdsr) & 512 ) buttons += 64;
-	if ( (~piob->pdsr) & 8388608 ) buttons += 128;
+	if ( (~piob->pdsr) & 32 ) buttons += 8;
+	if ( (~piob->pdsr) & 64 ) buttons += 16;
+	if ( (~piob->pdsr) & 128 ) buttons += 32;
+	if ( (~piob->pdsr) & 256 ) buttons += 64;
+	if ( (~piob->pdsr) & 1073741824 ) buttons += 128;
 	
 	buttons = ( (~piob->pdsr) & 0x700 ) >> 8;
 	
