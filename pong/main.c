@@ -1,15 +1,18 @@
 #include <sys/mman.h>			//For memory mapping
-#include <fcntl.h>
+#include <fcntl.h>			//for open()
 #include <stdlib.h>
-#include <stdio.h>
+#include <stdio.h>			//for printf()
+#include <string.h>			//for memcpy()
 
 static char *lcd;
+static char buffer[307200];
+
 
 void draw_one_pixel(short x, short y, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
 	int index = (x * 4) + (y * 1280);
-	lcd[index + 0] = r;			//A
-	lcd[index + 1] = 200;			//R
+//	lcd[index + 0] = a;			//A
+	lcd[index + 1] = r;			//R
 	lcd[index + 2] = g;			//G
 	lcd[index + 3] = b;			//B
 }
@@ -18,7 +21,7 @@ void draw_one_pixel(short x, short y, unsigned char r, unsigned char g, unsigned
 int main()
 {	
 	int file;
-	int x, y;
+	int x, y, i;
 
 	//Open the LDC driver file in read write mode
 	file = open("/dev/fb0", O_RDWR);
@@ -33,8 +36,12 @@ int main()
 	{
 		for( y = 0; y < 240; y++ )
 		{
-			draw_one_pixel(x, y, 0, 0, 0, 0);
+			draw_one_pixel(x, y, 255, 0, 0, 0);
 		}
+	}
+//	memmove( lcd, &buffer, sizeof(buffer) );
+	for( i = 0; i < 320*240*4; i++ ) {
+		lcd[i] = buffer[i];
 	}
 
 	return 0;

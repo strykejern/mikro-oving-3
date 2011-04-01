@@ -8,9 +8,9 @@ echo Making new pong folder
 mkdir pong
 
 echo Downloading resources...
-wget --timeout=3 -O /pong/stk1000_driver.ko http://mikro-oving-3.googlecode.com/svn/trunk/driver/stk1000_driver.ko 
-wget --timeout=3 -O /pong/pong.elf http://mikro-oving-3.googlecode.com/svn/trunk/pong/pong.elf
-wget --timeout=3 -O /pong/driver_test.elf http://mikro-oving-3.googlecode.com/svn/trunk/pong/driver_test.elf
+wget -O /pong/stk1000_driver.ko http://mikro-oving-3.googlecode.com/svn/trunk/driver/stk1000_driver.ko 
+wget -O /pong/pong.elf http://mikro-oving-3.googlecode.com/svn/trunk/pong/pong.elf
+wget -O /pong/driver_test.elf http://mikro-oving-3.googlecode.com/svn/trunk/pong/driver_test.elf
 
 echo Initializing custom STK1000 driver...
 insmod /pong/stk1000_driver.ko
