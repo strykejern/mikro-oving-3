@@ -1,6 +1,7 @@
 #include <sys/mman.h>			//For memory mapping
 #include <fcntl.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 static char *lcd;
 
@@ -25,12 +26,14 @@ int main()
 	//memory map file to array (4 bytes * 320x240 pixles)
 	lcd = (char*) mmap(0, 320*240*4, PROT_WRITE | PROT_READ, MAP_SHARED, file, 0);
 
+	printf( "BLUE\n" );
+
 	//Fill screen with red pixels
 	for( x = 0; x < 320; x++ ) 
 	{
 		for( y = 0; y < 240; y++ )
 		{
-			draw_one_pixel(x, y, 1, 255, 1, 1);
+			draw_one_pixel(x, y, 255, 255-y, y, 1);
 		}
 	}
 
