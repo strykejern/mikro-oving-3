@@ -10,6 +10,8 @@ int main()
 	
 	int leds;
 	
+	int bytes_written;
+	
 	leds = 0xF0;
 	
 	printf( "Opening file...\n" );
@@ -19,7 +21,9 @@ int main()
 	if( led_driver != -1 )
 	{
 		printf( "Writing to file...\n" );
-		write(led_driver, &leds, sizeof(leds));
+		bytes_written = write(led_driver, &leds, sizeof(leds));
+		
+		printf( "%d bytes written\n", bytes_written );
 	
 		printf( "Closing file...\n" );
 		close(led_driver);
