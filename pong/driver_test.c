@@ -1,29 +1,28 @@
 
-#include <stdio.h>
-#include <sys/mman.h>			//For memory mapping
 #include <fcntl.h>
-#include <stdlib.h>
-
-int left_paddle_pos = 120;
-int right_paddle_pos = 120;
+#include <stdio.h>
 
 
 //Program entry
 int main()
 {
-	FILE *led_driver;
+	int led_driver;
+	
+	int leds;
+	
+	leds = 0xF0;
 	
 	printf( "Opening file...\n" );
 	
-	led_driver = fopen("/dev/stk1000_driver", "w");
+	led_driver = open("/dev/stk1000_driver", O_WRONLY);
 		
-	if( led_driver )
+	if( led_driver != -1 )
 	{
 		printf( "Writing to file...\n" );
-		fprintf(led_driver, "%c%c", 0xA, 0xA);
+		write(led_driver, &leds, sizeof(leds));
 	
 		printf( "Closing file...\n" );
-		fclose(led_driver);
+		close(led_driver);
 	}
 	else
 	{
@@ -31,25 +30,6 @@ int main()
 	}
 	
 	printf( "Finished.\n" );
-/*
-	int *lcd;
-	int file;
-	int i = 0;
-
-	//Open the LDC driver file in read write mode
-	file = open("/dev/fb0", O_RDWR);
-
-	//memory map file to array
-	lcd = mmap(NULL, 320*240, PROT_WRITE | PROT_READ, MAP_PRIVATE, file, 0);
-
-	for( i = 0; i < 320*100; i++ ) 
-	{
-		lcd[i] = 0xFF000000;
-	}
-
-	while( 1 ) {
-	}
-
-*/
+	
 	return 0;
 }
