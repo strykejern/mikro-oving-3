@@ -13,16 +13,16 @@ int main()
 {
 	FILE *led_driver;
 	
-	printf( "Opening file..." );
+	printf( "Opening file...\n" );
 	
 	led_driver = fopen("/dev/led_driver", "w");
 		
 	if( led_driver )
 	{
-		printf( "Writing to file..." );
+		printf( "Writing to file...\n" );
 		fprintf(led_driver, "%c%c", 0xA, 0xA);
 	
-		printf( "Closing file..." );
+		printf( "Closing file...\n" );
 		fclose(led_driver);
 	}
 	else
@@ -30,7 +30,7 @@ int main()
 		printf( "FAIL!" );
 	}
 	
-	printf( "Finished." );
+	printf( "Finished.\n" );
 /*
 	int *lcd;
 	int file;
