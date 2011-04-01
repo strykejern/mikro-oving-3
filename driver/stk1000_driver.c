@@ -183,8 +183,9 @@ static ssize_t driver_read (struct file *filp, char __user *buff,
 	if ( (~piob->pdsr) & (64 * 256) ) buttons += 16;
 	if ( (~piob->pdsr) & (128 * 256) ) buttons += 32;
 	if ( (~piob->pdsr) & (256 * 256) ) buttons += 64;
-	if ( (~piob->pdsr) & (1073741824) ) buttons += 128;
+	//if ( (~piob->pdsr) & (1073741824) ) buttons += 128;
 	
+	// 01000000 00000001 11100111 00000000
 	
 	copy_to_user( buff, &buttons, sizeof(buttons) );
 	
