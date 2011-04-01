@@ -70,9 +70,9 @@ void LED_initialize( const unsigned char bits )
 void BUTTONS_initialize( void )
 {
 	int dsbl = 0x000000FF;
-	int enbl = 	0x200 +
-		   	0x400 +
-			0x800 +
+	int enbl = 	0x100 +
+		   	0x200 +
+			0x400 +
 			0x2000 +
 			0x4000 +
 			0x8000 +
@@ -183,9 +183,9 @@ static ssize_t driver_read (struct file *filp, char __user *buff,
 	
 	int buttons = 0;
 	
-	if ( (~piob->pdsr) & (0x200) ) buttons += 1;
-	if ( (~piob->pdsr) & (0x400) ) buttons += 2;
-	if ( (~piob->pdsr) & (0x800) ) buttons += 4;
+	if ( (~piob->pdsr) & (0x100) ) buttons += 1;
+	if ( (~piob->pdsr) & (0x200) ) buttons += 2;
+	if ( (~piob->pdsr) & (0x400) ) buttons += 4;
 	if ( (~piob->pdsr) & (0x2000) ) buttons += 8; // Alltid 1
 	if ( (~piob->pdsr) & (0x4000) ) buttons += 16;
 	if ( (~piob->pdsr) & (0x8000) ) buttons += 32;
