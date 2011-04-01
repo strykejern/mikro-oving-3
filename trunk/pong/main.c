@@ -7,7 +7,7 @@
 static char *lcd;
 static char buffer[307200];
 
-#define PADDLE_WIDTH 30
+#define PADDLE_WIDTH 15
 #define PADDLE_HEIGHT 50
 
 
