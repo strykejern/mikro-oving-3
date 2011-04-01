@@ -15,7 +15,7 @@ int main()
 	
 	printf( "Opening file...\n" );
 	
-	led_driver = fopen("/dev/led_driver", "w");
+	led_driver = fopen("/dev/stk1000_driver", "w");
 		
 	if( led_driver )
 	{
