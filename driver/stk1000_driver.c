@@ -21,7 +21,7 @@ static const char * DRIVER_NAME = "stk1000_driver";
 static const int DRIVER_MAJOR = 1;
 static const int DRIVER_MINOR = 0;
 
-static volatile avr32_pio_t *pioc = &AVR32_PIOB;	//LED
+static volatile avr32_pio_t *piob = &AVR32_PIOB;	//LED
 
 static int __init driver_init(void);
 static void __exit driver_exit(void);
@@ -45,19 +45,46 @@ static struct file_operations driver_fops = {
 /** Use this function to enable the LED specified in the BITFIELD **/
 void LED_set_enabled( const unsigned int bits ) 
 {
-	pioc->codr = ~bits;
-	pioc->sodr = bits;
+	piob->codr &= 0xFF00;
+	piob->codr |= ~bits;
+	
+	piob->sodr &= 0xFF00;
+	piob->sodr |= bits;
 }
 
 /** This function initializes the LED lamps **/
-void LED_initialize( const unsigned int bits ) 
+void LED_initialize( const unsigned char bits ) 
 {
+	
 	//Enable LED
-	pioc->per = bits;		//Register enable
-	pioc->oer = bits;		//Output enable
+	piob->per &= 0xFF00;
+	piob->per |= bits;		//Register enable
+	piob->oer &= 0xFF00;
+	piob->oer |= bits;		//Output enable
 
 	//Disable leds that arent used
-	pioc->pdr = ~bits;
+	piob->pdr &= 0x00FF;
+	piob->pdr |= ~bits;
+}
+
+void BUTTONS_initialize( const unsigned int bits ) 
+{
+	piob->odr &= 0x00FF;
+	piob->odr |= 0xFF00;               //Disable output on buttons
+
+        //Enable switches
+	piob->per &= 0x00FF;
+	piob->per |= bits << 8;               //Register enable
+	
+	piob->puer &= 0x00FF;
+	piob->puer |= bits << 8;              //Pullup enable
+
+        //Disable everything that isn't enabled
+	piob->pdr &= 0x00FF;
+	piob->pdr |= ~bits << 8;
+	
+	piob->idr &= 0x00FF;
+	piob->idr |= ~bits << 8;
 }
 
 /*****************************************************************************/
@@ -141,7 +168,14 @@ static int driver_release (struct inode *inode, struct file *filp) {
 
 static ssize_t driver_read (struct file *filp, char __user *buff,
               size_t count, loff_t *offp) {
-  return 0;
+	
+	int buttons;
+	
+	buttons = (~piob->pdsr) & 0xFF00;
+	
+	copy_to_user( buff, &buttons, sizeof(buttons) );
+	
+  	return 0;
 }
 
 /*---------------------------------------------------------------------------*/
