@@ -3,10 +3,10 @@ rmmod pong/stk1000_driver.ko
 
 echo Downloading resources...
 wget -O /pong/stk1000_driver.ko http://mikro-oving-3.googlecode.com/svn/trunk/driver/stk1000_driver.ko 
-wget -O /pong/pong.elf http://mikro-oving-3.googlecode.com/svn/trunk/src/pong.elf
+wget -O /pong/pong.elf http://mikro-oving-3.googlecode.com/svn/trunk/pong/pong.elf
 
 echo Initializing custom STK1000 driver...
-insmod pong/led_driver.ko
+insmod /pong/led_driver.ko
 
 echo Listing loaded drivers...
 lsmod

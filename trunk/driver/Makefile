@@ -5,7 +5,7 @@
 ###############################################################################
 
 # navn på kjernemodul (navnet på C-fila men uten ".c")
-MODULE = led_driver
+MODULE = stk1000_driver
 
 ifneq ($(KERNELRELEASE),)
 obj-m := ${MODULE}.o
