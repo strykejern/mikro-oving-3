@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>			//for printf()
 #include <string.h>			//for memcpy()
+#include <time.h>
+
 
 static char *lcd;
 static char buffer[307200];
@@ -20,8 +22,12 @@ typedef struct paddle_s
 
 typedef struct ball_s
 {
+	short oldXPos;
+	short oldYPos;
 	short xPos;
 	short yPos;
+	short xSpeed;
+	short ySpeed;
 } ball_t;
 
 static paddle_t player1;
@@ -36,9 +42,9 @@ void draw_one_pixel(short x, short y, unsigned char r, unsigned char g, unsigned
 {
 	int index = (x * 4) + (y * 1280);
 	lcd[index + 0] = a;			//A
-	lcd[index + 1] = r;			//R
+	lcd[index + 1] = b;			//R
 	lcd[index + 2] = g;			//G
-	lcd[index + 3] = b;			//B
+	lcd[index + 3] = r;			//B
 }
 
 void draw_paddle( paddle_t whichPaddle )
@@ -55,14 +61,43 @@ void draw_paddle( paddle_t whichPaddle )
 
 void draw_ball()
 {
-	
+	int i, j;
+
+	//Clear old ball
+	for( i = theBall.oldXPos; i < theBall.oldXPos+10; i++ ) 
+	{
+		for( j = theBall.oldYPos; j < theBall.oldYPos+10; j++ )
+		{
+			draw_one_pixel( i, j, 0, 0, 0, 0 );
+		}
+	}
+
+	//Draw new ball
+	for( i = theBall.xPos; i < theBall.xPos+10; i++ ) 
+	{
+		for( j = theBall.yPos; j < theBall.yPos+10; j++ )
+		{
+			draw_one_pixel( i, j, 255, 255, 255, 0 );
+		}
+	}
+
+	theBall.oldXPos = theBall.xPos;
+	theBall.oldYPos = theBall.yPos;
+}
+
+void flip_buffers()
+{
+	int i;
+	for( i = 0; i < 320*240*4; i++ ) {
+		lcd[i] = buffer[i];
+	}
 }
 
 //Program entry
 int main()
 {	
 	int file;
-	int x, y;
+	long delay;
 
 	//Open the LDC driver file in read write mode
 	file = open("/dev/fb0", O_RDWR);
@@ -73,7 +108,7 @@ int main()
 	//Clear screen
 	memset( lcd, 0, 320*240*4 );
 
-	printf( "version 8\n" );
+	printf( "version 10\n" );
 
 
 	//Initialize the players
@@ -81,21 +116,49 @@ int main()
 	player1.yPos = 120-(PADDLE_HEIGHT/2);
 	player1.r = 255;
 	player1.g = 0;
-	player1.b = 255;
+	player1.b = 0;
 
 	player2.xPos = 320-PADDLE_WIDTH;
 	player2.yPos = 120-(PADDLE_HEIGHT/2);
-	player2.r = 0;
+	player2.r = 255;
 	player2.g = 255;
-	player2.b = 255;
+	player2.b = 0;
 
 	//Initialize the ball
-	theBall.xPos = 160;
-	theBall.yPos = 120;
+	theBall.oldXPos = theBall.xPos = 160;
+	theBall.oldYPos = theBall.yPos = 120;
+	theBall.xSpeed = -1;
+	theBall.ySpeed = -1;
 
-	//Draw their paddles
-	draw_paddle( player1 );
-	draw_paddle( player2 );
+
+	//Main game loop
+	while( 1 )
+	{
+		theBall.xPos += theBall.xSpeed;
+		theBall.yPos += theBall.ySpeed;
+
+		//Collide with top and bottom
+		if( theBall.yPos <= 0 || theBall.yPos+10 >= 240 )
+		{
+			theBall.ySpeed = -theBall.ySpeed;
+		}
+
+		//Collide with left and right
+		if( theBall.xPos <= 0 || theBall.xPos+10 >= 320 )
+		{
+			theBall.xSpeed = -theBall.xSpeed;
+		}
+
+		draw_paddle( player1 );
+		draw_paddle( player2 );	
+		draw_ball();
+
+		//Busy wait
+		while(delay > 0) delay--;
+		delay = 250000;
+
+		printf("Finished frame\n");
+	}
 
 
 //	memmove( lcd, &buffer, sizeof(buffer) );
@@ -105,5 +168,4 @@ int main()
 
 	return 0;
 }
-
 
