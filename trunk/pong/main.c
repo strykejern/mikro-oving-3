@@ -13,10 +13,10 @@ int main()
 	//Open the LDC driver file in read write mode
 	file = open("/dev/fb0", O_RDWR);
 
-	//memory map file to array
-	lcd = mmap(NULL, 320*240, PROT_WRITE | PROT_READ, MAP_PRIVATE, file, 0);
+	//memory map file to array (4 bytes * 320x100 pixles)
+	lcd = mmap(NULL, 320*240*4, PROT_WRITE | PROT_READ, MAP_PRIVATE, file, 0);
 
-	for( i = 0; i < 320*100; i++ ) 
+	for( i = 0; i < 320*100*4; i++ ) 
 	{
 		lcd[i] = 0xFF000000;
 	}
