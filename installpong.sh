@@ -6,7 +6,7 @@ wget -O /pong/stk1000_driver.ko http://mikro-oving-3.googlecode.com/svn/trunk/dr
 wget -O /pong/pong.elf http://mikro-oving-3.googlecode.com/svn/trunk/pong/pong.elf
 
 echo Initializing custom STK1000 driver...
-insmod /pong/led_driver.ko
+insmod /pong/stk1000_driver.ko
 
 echo Listing loaded drivers...
 lsmod
