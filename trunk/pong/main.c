@@ -29,20 +29,28 @@ int main()
 	//memory map file to array (4 bytes * 320x240 pixles)
 	lcd = (char*) mmap(0, 320*240*4, PROT_WRITE | PROT_READ, MAP_SHARED, file, 0);
 
-	printf( "RED\n" );
+	printf( "TRUE RED\n" );
 
-	//Fill screen with red pixels
 	for( x = 0; x < 320; x++ ) 
 	{
 		for( y = 0; y < 240; y++ )
 		{
-			draw_one_pixel(x, y, 255, 0, 0, 0);
+			lcd[x*4 + y*1024] = 255;
+		}
+	}
+
+	//Fill screen with red pixels
+//	for( x = 0; x < 320; x++ ) 
+	{
+//		for( y = 0; y < 240; y++ )
+		{
+//			draw_one_pixel(x, y, 255, 0, 0, 0);
 		}
 	}
 //	memmove( lcd, &buffer, sizeof(buffer) );
-	for( i = 0; i < 320*240*4; i++ ) {
-		lcd[i] = buffer[i];
-	}
+//	for( i = 0; i < 320*240*4; i++ ) {
+//		lcd[i] = buffer[i];
+//	}
 
 	return 0;
 }
