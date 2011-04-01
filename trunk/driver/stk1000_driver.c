@@ -84,7 +84,7 @@ void BUTTONS_initialize( void )
 
         //Enable switches
 	piob->per &= dsbl;
-	piob->per |= dsbl;               //Register enable
+	piob->per |= enbl;               //Register enable
 	
 	piob->puer &= dsbl;
 	piob->puer |= enbl;              //Pullup enable
