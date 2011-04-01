@@ -29,12 +29,8 @@ int main()
 	{
 		for( y = 0; y < 240; y++ )
 		{
-			draw_one_pixel(x, y, 255, 255, 255);
+			draw_one_pixel(x, y, 0, 255, 0);
 		}
-	}
-
-	while( 1 ) {
-		//infinite loop
 	}
 
 	return 0;
