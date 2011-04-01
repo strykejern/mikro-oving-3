@@ -21,7 +21,7 @@ static const char * DRIVER_NAME = "stk1000_driver";
 static const int DRIVER_MAJOR = 1;
 static const int DRIVER_MINOR = 0;
 
-static volatile avr32_pio_t *pioc = &AVR32_PIOC;	//LED
+static volatile avr32_pio_t *pioc = &AVR32_PIOB;	//LED
 
 static int __init driver_init(void);
 static void __exit driver_exit(void);
