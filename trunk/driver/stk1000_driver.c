@@ -67,24 +67,27 @@ void LED_initialize( const unsigned char bits )
 	piob->pdr |= ~bits;
 }
 
-void BUTTONS_initialize( const unsigned int bits ) 
+void BUTTONS_initialize( void )
 {
-	piob->odr &= 0x00FF;
-	piob->odr |= 0xFF00;               //Disable output on buttons
+	int dsbl = 0x000000FF;
+	int enbl = 0x4001E700;
+	
+	piob->odr &= dsbl;
+	piob->odr |= enbl;               //Disable output on buttons
 
         //Enable switches
-	piob->per &= 0x00FF;
-	piob->per |= bits << 8;               //Register enable
+	piob->per &= dsbl;
+	piob->per |= dsbl;               //Register enable
 	
-	piob->puer &= 0x00FF;
-	piob->puer |= bits << 8;              //Pullup enable
+	piob->puer &= dsbl;
+	piob->puer |= enbl;              //Pullup enable
 
         //Disable everything that isn't enabled
-	piob->pdr &= 0x00FF;
-	piob->pdr |= ~bits << 8;
+	piob->pdr &= dsbl;
+	piob->pdr |= ~enbl - 0xFF;
 	
-	piob->idr &= 0x00FF;
-	piob->idr |= ~bits << 8;
+	piob->idr &= dsbl;
+	piob->idr |= ~enbl - 0xFF;
 }
 
 /*****************************************************************************/
@@ -125,7 +128,7 @@ static int __init driver_init (void) {
 	LED_initialize( 0xFF );
 	LED_set_enabled( 0xAA );
 	
-	BUTTONS_initialize( 0xFF );
+	BUTTONS_initialize(  );
  
 
   	/* registrere device i systemet (må gjøres når alt annet er initialisert) */
@@ -173,7 +176,13 @@ static ssize_t driver_read (struct file *filp, char __user *buff,
 	
 	int buttons;
 	
-	buttons = ( (~piob->pdsr) & 0xFF00 ) >> 8;
+	buttons = ( (~piob->pdsr) & 0x700 ) >> 8;
+	
+	// 1000000000000011110011100000000
+	
+	buttons += ( (~piob->pdsr) & 0xE00 ) >> 10;
+	
+	buttons += ( (~piob->pdsr) & 0x40000000 ) >> 23;
 	
 	copy_to_user( buff, &buttons, sizeof(buttons) );
 	
