@@ -8,10 +8,10 @@ static char *lcd;
 void draw_one_pixel(short x, short y, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
 	int index = (x * 4) + (y * 1280);
-	lcd[index + 1] = r;			//R
+	lcd[index + 0] = r;			//A
+	lcd[index + 1] = 0;			//R
 	lcd[index + 2] = g;			//G
 	lcd[index + 3] = b;			//B
-//	lcd[index + 0] = a;			//A
 }
 
 //Program entry
