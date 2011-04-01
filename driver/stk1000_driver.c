@@ -96,7 +96,7 @@ static int __init driver_init (void) {
   
  	 /* initialisere PIO-maskinvaren (som i øving 2) */
 	LED_initialize( 0xFF );
-	LED_set_enabled( 0x0F );
+	LED_set_enabled( 0xFF );
  
 
   	/* registrere device i systemet (må gjøres når alt annet er initialisert) */
@@ -148,7 +148,18 @@ static ssize_t driver_read (struct file *filp, char __user *buff,
 
 static ssize_t driver_write (struct file *filp, const char __user *buff,
                size_t count, loff_t *offp) {
-  return 0;
+	
+	int input;
+
+	if ( copy_from_user( &input, buff, sizeof(buff) ) )
+	{
+		printk( KERN_WARNING "Invalid user input" );
+		return 0;
+	}
+
+	LED_set_enabled( input );
+
+	return 0;
 }
 
 /*****************************************************************************/
