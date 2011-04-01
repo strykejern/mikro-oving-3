@@ -1,9 +1,16 @@
 echo Uninitializing old drivers...
 rmmod pong/stk1000_driver.ko
 
+echo Removing old files
+rm -R pong/
+
+echo Making new pong folder
+mkdir pong
+
 echo Downloading resources...
 wget -O /pong/stk1000_driver.ko http://mikro-oving-3.googlecode.com/svn/trunk/driver/stk1000_driver.ko 
 wget -O /pong/pong.elf http://mikro-oving-3.googlecode.com/svn/trunk/pong/pong.elf
+wget -O /pong/driver_test.elf http://mikro-oving-3.googlecode.com/svn/trunk/pong/driver_test.elf
 
 echo Initializing custom STK1000 driver...
 insmod /pong/stk1000_driver.ko
@@ -20,3 +27,6 @@ mknod /dev/stk1000_driver c 254 0
 echo Changing permissions...
 chmod a+rwx /dev/stk1000_driver
 chmod a+rwx /pong/pong.elf
+
+echo Changing folder
+cd pong/
