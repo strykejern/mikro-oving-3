@@ -70,7 +70,14 @@ void LED_initialize( const unsigned char bits )
 void BUTTONS_initialize( void )
 {
 	int dsbl = 0x000000FF;
-	int enbl = 0x4001E700;
+	int enbl = 	0x200 +
+		   	0x400 +
+			0x800 +
+			0x2000 +
+			0x4000 +
+			0x8000 +
+			0x10000 +
+			0x40000000;
 	
 	piob->odr &= dsbl;
 	piob->odr |= enbl;               //Disable output on buttons
