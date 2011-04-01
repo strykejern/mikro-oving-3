@@ -17,7 +17,7 @@
 #include "ap7000.h"
 
 /* prototyper */
-static const char * DRIVER_NAME = "stk1000_led_and_button_driver";
+static const char * DRIVER_NAME = "stk1000_driver";
 static const int DRIVER_MAJOR = 1;
 static const int DRIVER_MINOR = 0;
 
