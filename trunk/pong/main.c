@@ -29,7 +29,7 @@ int main()
 	{
 		for( y = 0; y < 240; y++ )
 		{
-			draw_one_pixel(x, y, 0, 0, 255);
+			draw_one_pixel(x, y, 255, 0, 255);
 		}
 	}
 
