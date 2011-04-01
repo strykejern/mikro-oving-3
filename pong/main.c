@@ -30,7 +30,7 @@ int main()
 	{
 		for( y = 0; y < 240; y++ )
 		{
-			draw_one_pixel(x, y, 1, 1, 255, 0);
+			draw_one_pixel(x, y, 1, 255, 1, 1);
 		}
 	}
 
