@@ -45,10 +45,10 @@ static struct file_operations driver_fops = {
 /** Use this function to enable the LED specified in the BITFIELD **/
 void LED_set_enabled( const unsigned int bits ) 
 {
-	piob->codr &= 0xFF00;
+	piob->codr &= 0xFFFFFF00;
 	piob->codr |= ~bits;
 	
-	piob->sodr &= 0xFF00;
+	piob->sodr &= 0xFFFFFF00;
 	piob->sodr |= bits;
 }
 
@@ -57,9 +57,9 @@ void LED_initialize( const unsigned char bits )
 {
 	
 	//Enable LED
-	piob->per &= 0xFF00;
+	piob->per &= 0xFFFFFF00;
 	piob->per |= bits;		//Register enable
-	piob->oer &= 0xFF00;
+	piob->oer &= 0xFFFFFF00;
 	piob->oer |= bits;		//Output enable
 
 	//Disable leds that arent used
