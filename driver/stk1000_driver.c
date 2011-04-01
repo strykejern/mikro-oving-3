@@ -125,7 +125,7 @@ static int __init driver_init (void) {
 	LED_initialize( 0xFF );
 	LED_set_enabled( 0xAA );
 	
-	BUTTONS_initialize( 0xFF00 );
+	BUTTONS_initialize( 0xFF );
  
 
   	/* registrere device i systemet (må gjøres når alt annet er initialisert) */
