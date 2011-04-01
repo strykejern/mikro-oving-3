@@ -96,7 +96,7 @@ static int __init driver_init (void) {
   
  	 /* initialisere PIO-maskinvaren (som i øving 2) */
 	LED_initialize( 0xFF );
-	LED_set_enabled( 0xFF );
+	LED_set_enabled( 0xAA );
  
 
   	/* registrere device i systemet (må gjøres når alt annet er initialisert) */
