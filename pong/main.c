@@ -4,12 +4,13 @@
 
 static char *lcd;
 
-void draw_one_pixel(short x, short y, unsigned char r, unsigned char g, unsigned char b)
+void draw_one_pixel(short x, short y, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
 	int index = (x * 4) + (y * 1280);
-	lcd[index + 0] = r;			//R
-	lcd[index + 1] = g;			//G
-	lcd[index + 2] = b;			//B
+	lcd[index + 0] = r;			//A
+	lcd[index + 1] = g;			//R
+	lcd[index + 2] = b;			//G
+	lcd[index + 3] = a;			//B
 }
 
 //Program entry
@@ -29,7 +30,7 @@ int main()
 	{
 		for( y = 0; y < 240; y++ )
 		{
-			draw_one_pixel(x, y, 250, 0, 1);
+			draw_one_pixel(x, y, 250, 1, 1, 128);
 		}
 	}
 
