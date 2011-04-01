@@ -27,4 +27,4 @@ mknod /dev/stk1000_driver c 254 0
 echo Changing permissions...
 chmod a+rwx /dev/stk1000_driver
 chmod a+rwx /pong/pong.elf
-chmod a+rwx /pong/driver_test-elf
+chmod a+rwx /pong/driver_test.elf
