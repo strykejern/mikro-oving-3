@@ -71,6 +71,7 @@ void draw_ball()
 int main()
 {	
 	int file;
+	short xSpeed, ySpeed;
 //	long delay;
 
 	printf( "version 11\n" );
@@ -100,8 +101,15 @@ int main()
 	//Initialize the ball
 	theBall.oldXPos = theBall.xPos = 160;
 	theBall.oldYPos = theBall.yPos = 120;
-	theBall.xSpeed = -1;
-	theBall.ySpeed = -1;
+
+	//Randomize ball velocity
+	xSpeed = 1;
+	ySpeed = 1;
+	if( rand() & 1 ) xSpeed = -xSpeed;
+	if( rand() & 1 ) ySpeed = -ySpeed;
+	theBall.xSpeed = xSpeed;
+	theBall.ySpeed = ySpeed;
+
 
 
 	//Main game loop
