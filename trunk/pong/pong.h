@@ -26,6 +26,7 @@ typedef struct paddle_s
 	short yPos;
 	short oldY;
 	COLOR c;
+	char score;
 } paddle_t;
 
 typedef struct ball_s
