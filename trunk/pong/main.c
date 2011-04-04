@@ -160,10 +160,10 @@ int main()
 		//Read input
 		int input = BUTTONS();
 		if( 8 == (input & 8) ) break;			//quit
-		if( 1 == (input & 1) ) player2.yPos--;		//player 2 up
-		if( 2 == (input & 2) ) player2.yPos++;		//player 2 down
-		if( 128 == (input & 128) ) player1.yPos--;	//player 1 up
-		if( 64 == (input & 64) ) player1.yPos++;		//player 1 down
+		if( 1 == (input & 1) ) player2.yPos-=2;		//player 2 up
+		else if( 2 == (input & 2) ) player2.yPos+=2;	//player 2 down
+		if( 128 == (input & 128) ) player1.yPos-=2;	//player 1 up
+		else if( 64 == (input & 64) ) player1.yPos+=2;	//player 1 down
 
 
 		//Move the ball
@@ -197,12 +197,12 @@ int main()
 		//Collide with paddles
 		if( paddle_collides(&player1, &theBall) )
 		{
-			theBall.xSpeed = -theBall.xSpeed;
+			theBall.xSpeed = -theBall.xSpeed + 1;
 			theBall.xPos += theBall.xSpeed;
 		}
 		else if( paddle_collides(&player2, &theBall) )
 		{
-			theBall.xSpeed = -theBall.xSpeed;
+			theBall.xSpeed = -theBall.xSpeed - 1;
 			theBall.xPos += theBall.xSpeed;
 		}
 
