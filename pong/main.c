@@ -6,6 +6,8 @@
 #include <unistd.h>			//For sleep
 #include <time.h>			//For random seed
 
+#include <linux/soundcard.h>
+
 #include "driver_interface.h"
 #include "pong.h"
 
@@ -220,7 +222,7 @@ void render_screen()
 //Program entry
 int main()
 {	
-	int file;
+	int file, sound;
 
 	//Initialize the drivers
 	initialize_driver();
@@ -230,6 +232,17 @@ int main()
 
 	//Open the LDC driver file in read write mode
 	file = open("/dev/fb0", O_RDWR);
+
+	int sample_rate = 22050;
+	sound = open("/dev/dsp", O_RDWR);
+	ioctl(sound, SOUND_PCM_WRITE_RATE, &sample_rate);
+
+	int bytes_written;
+	while( !BUTTONS() )
+	{
+		int sound_data = rand();
+		bytes_written = write( sound, &sound_data, sizeof(sound_data) );
+	}
 
 	//memory map file to array (4 bytes * 320x240 pixles)
 	lcd = (char*) mmap(0, 320*240*4, PROT_WRITE | PROT_READ, MAP_SHARED, file, 0);
