@@ -15,7 +15,7 @@ void LEDS ( const unsigned char enable )
 {
 	int bytes_written;
 	
-	bytes_written = write( led_driver, &leds, sizeof(leds) );
+	bytes_written = write( driver, &enable, sizeof(enable) );
 }
 
 char BUTTONS ()
@@ -24,7 +24,7 @@ char BUTTONS ()
 	
 	int bytes_read;
 	
-	bytes_read = read( led_driver, &buttons, sizeof(buttons) );
+	bytes_read = read( driver, &buttons, sizeof(buttons) );
 	
 	return buttons;
 }
