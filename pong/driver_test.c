@@ -27,10 +27,10 @@ int main()
 		printf( "Writing to file...\n" );
 		bytes_written = write( led_driver, &leds, sizeof(leds) );
 		
-		printf( "%d bytes written\n", bytes_written );
+		printf( "%d bytes written: %d\n", bytes_written, leds );
 		
 		bytes_read = read( led_driver, &buttons, sizeof(buttons) );
-		printf( "%d bytes read: %d", bytes_read, buttons );
+		printf( "%d bytes read: %d\n", bytes_read, buttons );
 	
 		printf( "Closing file...\n" );
 		close(led_driver);
