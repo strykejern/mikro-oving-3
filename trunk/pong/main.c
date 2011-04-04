@@ -47,18 +47,18 @@ void draw_ball()
 	int i, j;
 
 	//Clear old ball
-	for( i = theBall.oldXPos; i < theBall.oldXPos+10; i++ ) 
+	for( i = theBall.oldXPos; i < theBall.oldXPos+BALL_SIZE; i++ ) 
 	{
-		for( j = theBall.oldYPos; j < theBall.oldYPos+10; j++ )
+		for( j = theBall.oldYPos; j < theBall.oldYPos+BALL_SIZE; j++ )
 		{
 			draw_one_pixel( i, j, COLOR_BLACK);
 		}
 	}
 
 	//Draw new ball
-	for( i = theBall.xPos; i < theBall.xPos+10; i++ ) 
+	for( i = theBall.xPos; i < theBall.xPos+BALL_SIZE; i++ ) 
 	{
-		for( j = theBall.yPos; j < theBall.yPos+10; j++ )
+		for( j = theBall.yPos; j < theBall.yPos+BALL_SIZE; j++ )
 		{
 			draw_one_pixel( i, j, COLOR_WHITE );
 		}
@@ -130,9 +130,9 @@ int main()
 			theBall.yPos = 0;
 			theBall.ySpeed = -theBall.ySpeed;
 		}
-		else if( theBall.yPos+10 >= 240 )
+		else if( theBall.yPos+BALL_SIZE >= 240 )
 		{
-			theBall.yPos = 230;
+			theBall.yPos = 240-BALL_SIZE;
 			theBall.ySpeed = -theBall.ySpeed;
 		}
 
@@ -142,9 +142,9 @@ int main()
 			theBall.xPos = 0;
 			theBall.xSpeed = -theBall.xSpeed;
 		}
-		else if( theBall.xPos+10 >= 320 )
+		else if( theBall.xPos+BALL_SIZE >= 320 )
 		{
-			theBall.xPos = 310;
+			theBall.xPos = 320-BALL_SIZE;
 			theBall.xSpeed = -theBall.xSpeed;
 		}
 

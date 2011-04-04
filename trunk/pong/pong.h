@@ -4,6 +4,12 @@
 #define PADDLE_WIDTH 15
 #define PADDLE_HEIGHT 50
 
+#define BALL_SIZE 10
+
+#define FRAMES_PER_SECOND 30
+#define SLEEP_PER_FRAME 1000000 / FRAMES_PER_SECOND	
+
+
 typedef struct color_s
 {
 	unsigned char r;
