@@ -2,7 +2,7 @@
 #define DRIVER_INTERFACE
 
 void initialize_driver();
-void LEDS ( const int enable );
-char BUTTONS();
+void LEDS ( int enable );
+int BUTTONS();
 
 #endif

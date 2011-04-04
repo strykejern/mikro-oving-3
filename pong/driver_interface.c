@@ -13,16 +13,18 @@ void initialize_driver()
 	if (driver == -1) printf("DRIVER FAIL!");
 }
 
-void LEDS ( const int enable )
+void LEDS ( int enable )
 {
+	int leds = enable;
+	
 	int bytes_written;
 	
-	bytes_written = write( driver, &enable, sizeof(enable) );
+	bytes_written = write( driver, &leds, sizeof(leds) );
 }
 
-char BUTTONS ()
+int BUTTONS ()
 {
-	char buttons;
+	int buttons;
 	
 	int bytes_read;
 	
