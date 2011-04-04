@@ -70,7 +70,10 @@ void draw_ball()
 
 char paddle_collides( paddle_t whichPaddle )
 {
-//	if( theBall.x 
+	if( theBall.xPos >= whichPaddle.xPos 
+	 && theBall.yPos >= whichPaddle.yPos
+	 && theBall.xPos <= whichPaddle.xPos + PADDLE_WIDTH 
+	 && theBall.yPos <= whichPaddle.yPos + PADDLE_HEIGHT ) return 1;
 	return 0;
 }
 
@@ -156,7 +159,10 @@ int main()
 		}
 
 		//Collide with paddles
-		if( paddle_collides(player1) );
+		if( paddle_collides(player1) )
+			theBall.xSpeed = -theBall.xSpeed;
+		else if( paddle_collides(player2) )
+			theBall.xSpeed = -theBall.xSpeed;
 
 		draw_paddle( player1 );
 		draw_paddle( player2 );	
@@ -167,7 +173,7 @@ int main()
 
 //		printf("Finished frame %d\n", count);
 		count++;
-		LEDS(count);
+		LEDS(0xFF);
 		if( count >= 30*10 ) break;
 	}
 
