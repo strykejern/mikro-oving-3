@@ -70,10 +70,10 @@ void draw_ball()
 
 char paddle_collides( paddle_t whichPaddle )
 {
-	if( theBall.xPos <= whichPaddle.xPos 
-	 && theBall.yPos <= whichPaddle.yPos
-	 && theBall.xPos >= whichPaddle.xPos + PADDLE_WIDTH 
-	 && theBall.yPos >= whichPaddle.yPos + PADDLE_HEIGHT ) return 1;
+	if( theBall.xPos >= whichPaddle.xPos 
+	 && theBall.yPos >= whichPaddle.yPos
+	 && theBall.xPos <= whichPaddle.xPos + PADDLE_WIDTH 
+	 && theBall.yPos <= whichPaddle.yPos + PADDLE_HEIGHT ) return 1;
 	return 0;
 }
 
