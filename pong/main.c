@@ -125,14 +125,26 @@ int main()
 		theBall.yPos += theBall.ySpeed;
 
 		//Collide with top and bottom
-		if( theBall.yPos <= 0 || theBall.yPos+10 >= 240 )
+		if( theBall.yPos <= 0 )
 		{
+			theBall.yPos = 0;
+			theBall.ySpeed = -theBall.ySpeed;
+		}
+		else if( theBall.yPos+10 >= 240 )
+		{
+			theBall.yPos = 230;
 			theBall.ySpeed = -theBall.ySpeed;
 		}
 
 		//Collide with left and right
-		if( theBall.xPos <= 0 || theBall.xPos+10 >= 320 )
+		if( theBall.xPos <= 0 )
 		{
+			theBall.xPos = 0;
+			theBall.xSpeed = -theBall.xSpeed;
+		}
+		else if( theBall.xPos+10 >= 320 )
+		{
+			theBall.xPos = 310;
 			theBall.xSpeed = -theBall.xSpeed;
 		}
 
