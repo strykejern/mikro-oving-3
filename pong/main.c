@@ -156,9 +156,9 @@ void LED_update_score()
 	leds |= 2*(player2.score >= 2); 
 	leds |= 4*(player2.score >= 3); 
 
-	leds |= 128*(player2.score >= 1); 
-	leds |= 64*(player2.score >= 2); 
-	leds |= 32*(player2.score >= 3); 
+	leds |= 128*(player1.score >= 1); 
+	leds |= 64*(player1.score >= 2); 
+	leds |= 32*(player1.score >= 3); 
 
 	LEDS(leds);
 }
