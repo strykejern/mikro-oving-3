@@ -53,18 +53,18 @@ void LED_set_enabled( const unsigned int bits )
 }
 
 /** This function initializes the LED lamps **/
-void LED_initialize( const unsigned char bits ) 
+void LED_initialize( void ) 
 {
 	
 	//Enable LED
 	piob->per &= 0xFFFFFF00;
-	piob->per |= bits;		//Register enable
+	piob->per = 0xFF;		//Register enable
 	piob->oer &= 0xFFFFFF00;
-	piob->oer |= bits;		//Output enable
+	piob->oer = 0xFF;		//Output enable
 
 	//Disable leds that arent used
-	piob->pdr &= 0x00FF;
-	piob->pdr |= ~bits;
+	piob->pdr &= 0xFF;
+	piob->pdr = ~0xFF;
 }
 
 void BUTTONS_initialize( void )
@@ -90,8 +90,8 @@ void BUTTONS_initialize( void )
 	piob->puer |= enbl;              //Pullup enable
 
         //Disable everything that isn't enabled
-	piob->pdr &= dsbl;
-	piob->pdr |= (~enbl) & ~0xFF;
+	piob->pdr = 0x0;
+	piob->pdr = (~enbl) & (~0xFF);
 }
 
 /*****************************************************************************/
