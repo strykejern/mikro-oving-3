@@ -91,7 +91,7 @@ void BUTTONS_initialize( void )
 
         //Disable everything that isn't enabled
 	piob->pdr &= dsbl;
-	piob->pdr |= (~enbl) & dsbl;
+	piob->pdr |= (~enbl) & ~0xFF;
 }
 
 /*****************************************************************************/
