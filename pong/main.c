@@ -119,7 +119,8 @@ int main()
 	//Main game loop
 	while( 1 )
 	{
-		if( BUTTONS() ) break;
+		printf("button pushed %d\n", BUTTONS());
+//		if( BUTTONS() ) break;
 
 		theBall.xPos += theBall.xSpeed;
 		theBall.yPos += theBall.ySpeed;
@@ -155,7 +156,7 @@ int main()
 		//Busy wait
 		usleep(1000000/30);	//30 frames per second
 
-		printf("Finished frame %d\n", count);
+//		printf("Finished frame %d\n", count);
 		count++;
 		LEDS(count);
 		if( count >= 30*10 ) break;
