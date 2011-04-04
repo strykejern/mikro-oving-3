@@ -149,6 +149,20 @@ void read_input()
 	}
 }
 
+void LED_update_score()
+{
+	unsigned char leds;
+	leds |= 1*(player2.score >= 1); 
+	leds |= 2*(player2.score >= 2); 
+	leds |= 4*(player2.score >= 3); 
+
+	leds |= 128*(player2.score >= 1); 
+	leds |= 64*(player2.score >= 2); 
+	leds |= 32*(player2.score >= 3); 
+
+	LEDS(leds);
+}
+
 void update_physics()
 {
 	//Move the ball
@@ -171,12 +185,16 @@ void update_physics()
 	if( theBall.xPos <= 0 )
 	{
 		//player 1 loses
+		player2.score++;
 		reset_ball();
+		LED_update_score();
 	}
 	else if( theBall.xPos+BALL_SIZE >= 320 )
 	{
 		//player 2 loses
+		player1.score++;
 		reset_ball();
+		LED_update_score();
 	}
 
 	//Collide with paddles
@@ -225,12 +243,17 @@ int main()
 	player1.c.r = 255;
 	player1.c.g = 0;
 	player1.c.b = 0;
+	player1.score = 0;
 
 	player2.xPos = 320-PADDLE_WIDTH;
 	player2.yPos = 120-(PADDLE_HEIGHT/2);
 	player2.c.r = 255;
 	player2.c.g = 255;
 	player2.c.b = 0;
+	player2.score = 0;
+
+	//Reset score display
+	LED_update_score();
 
 	//Initialize the ball
 	reset_ball();
@@ -249,8 +272,6 @@ int main()
 
 		//Take it easy, relax a bit
 		usleep(SLEEP_PER_FRAME);	//30 frames per second
-
-		LEDS(0xFF);
 	}
 
 	//Clear screen on exit
