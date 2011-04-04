@@ -9,8 +9,8 @@
 #include "driver_interface.h"
 #include "pong.h"
 
+//Private variables
 static char *lcd;
-
 static paddle_t player1;
 static paddle_t player2;
 static ball_t theBall;
@@ -76,7 +76,7 @@ int main()
 	int count = 0;
 
 	//Initialize the drivers
-	initalize_driver();
+	initialize_driver();
 
 	//Initialize random number generator
 	srand( time(NULL) );
