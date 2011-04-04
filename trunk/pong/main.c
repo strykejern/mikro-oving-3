@@ -136,9 +136,7 @@ int main()
 		draw_ball();
 
 		//Busy wait
-		usleep(10000);
-//		while(delay > 0) delay--;
-//		delay = 250000;
+		usleep(1000000);	//1 seconds
 
 		printf("Finished frame %d\n", count);
 		count++;
