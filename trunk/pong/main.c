@@ -160,10 +160,10 @@ int main()
 		//Read input
 		int input = BUTTONS();
 		if( 8 == (input & 8) ) break;			//quit
-		if( 1 == (input & 1) ) player2.yPos-=2;		//player 2 up
-		else if( 2 == (input & 2) ) player2.yPos+=2;	//player 2 down
-		if( 128 == (input & 128) ) player1.yPos-=2;	//player 1 up
-		else if( 64 == (input & 64) ) player1.yPos+=2;	//player 1 down
+		if( 1 == (input & 1) ) player2.yPos-=5;		//player 2 up
+		else if( 2 == (input & 2) ) player2.yPos+=5;	//player 2 down
+		if( 128 == (input & 128) ) player1.yPos-=5;	//player 1 up
+		else if( 64 == (input & 64) ) player1.yPos+=5;	//player 1 down
 
 		if( player1.yPos < 0 ) player1.yPos = 0;
 		if( player2.yPos < 0 ) player2.yPos = 0;
