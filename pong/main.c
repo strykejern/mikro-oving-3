@@ -165,6 +165,11 @@ int main()
 		if( 128 == (input & 128) ) player1.yPos-=2;	//player 1 up
 		else if( 64 == (input & 64) ) player1.yPos+=2;	//player 1 down
 
+		if( player1.yPos < 0 ) player1.yPos = 0;
+		if( player2.yPos < 0 ) player2.yPos = 0;
+		if( player1.yPos+PADDLE_HEIGHT > 240 ) player1.yPos = 240-PADDLE_HEIGHT;
+		if( player2.yPos+PADDLE_HEIGHT > 240 ) player2.yPos = 240-PADDLE_HEIGHT;
+
 
 		//Move the ball
 		theBall.xPos += theBall.xSpeed;
