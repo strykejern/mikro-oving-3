@@ -140,7 +140,7 @@ int main()
 
 		printf("Finished frame %d\n", count);
 		count++;
-		if( count >= 5 ) break;
+		if( count >= 30*10 ) break;
 	}
 
 
