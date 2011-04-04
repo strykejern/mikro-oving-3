@@ -4,6 +4,7 @@
 #include <stdio.h>			//for printf()
 #include <string.h>			//for memcpy()
 #include <unistd.h>			//For sleep
+#include <time.h>			//For random seed
 
 #include "pong.h"
 
@@ -72,10 +73,12 @@ int main()
 {	
 	int file;
 	short xSpeed, ySpeed;
-//	long delay;
 	int count = 0;
 
 	printf( "version 11\n" );
+
+	//Initialize random number generator
+	srand( time(NULL) );
 
 	//Open the LDC driver file in read write mode
 	file = open("/dev/fb0", O_RDWR);
@@ -112,7 +115,6 @@ int main()
 	theBall.ySpeed = ySpeed;
 
 
-
 	//Main game loop
 	while( 1 )
 	{
@@ -143,6 +145,8 @@ int main()
 		if( count >= 30*10 ) break;
 	}
 
+	//Clear screen
+	memset( lcd, 0, 320*240*4 );
 
 	return EXIT_SUCCESS;
 }
