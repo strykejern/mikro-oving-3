@@ -24,17 +24,6 @@ void draw_one_pixel(short x, short y, COLOR color )
 	lcd[index + 3] = color.r;		//R
 }
 
-void clear_paddle( paddle_t *whichPaddle )
-{
-	int i, j;
-	for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
-	{
-		for( j = whichPaddle->yPos; j < whichPaddle->yPos+PADDLE_HEIGHT; j++ )
-		{
-			draw_one_pixel( i, j, COLOR_BLACK );
-		}
-	}
-}
 
 void draw_paddle( paddle_t *whichPaddle )
 {
@@ -43,10 +32,16 @@ void draw_paddle( paddle_t *whichPaddle )
 	//Only draw if we have moved since last frame
 	if( whichPaddle->oldY != whichPaddle->yPos )
 	{
-		whichPaddle->oldY = whichPaddle->yPos;
 
 		//First clear old paddle
-		clear_paddle( whichPaddle );
+		for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
+		{
+			for( j =whichPaddle->oldY; j < whichPaddle->oldY+PADDLE_HEIGHT; j++ )
+			{
+				draw_one_pixel( i, j, COLOR_BLACK );
+			}
+		}
+		whichPaddle->oldY = whichPaddle->yPos;
 
 		//Then draw the new one
 		for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
