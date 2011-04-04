@@ -237,10 +237,14 @@ int main()
 	sound = open("/dev/dsp", O_RDWR);
 	ioctl(sound, SOUND_PCM_WRITE_RATE, &sample_rate);
 
+	int sound_file;
+	sound_file = open("09-the-moon.wav", O_RDWR);
+
 	int bytes_written;
 	while( !BUTTONS() )
 	{
-		int sound_data = rand();
+		int sound_data;
+		read( sound_file, &sound_data, sizeof(sound_data) );
 		bytes_written = write( sound, &sound_data, sizeof(sound_data) );
 	}
 
