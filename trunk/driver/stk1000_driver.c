@@ -129,7 +129,7 @@ static int __init driver_init (void) {
 	}
   
  	 /* initialisere PIO-maskinvaren (som i øving 2) */
-	LED_initialize( 0xFF );
+	LED_initialize(  );
 	LED_set_enabled( 0xAA );
 	
 	BUTTONS_initialize(  );
