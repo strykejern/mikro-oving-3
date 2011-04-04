@@ -9,6 +9,8 @@ static int driver;
 void initialize_driver()
 {
 	driver = open("/dev/stk1000_driver", O_RDWR);
+	
+	if (driver == -1) printf("DRIVER FAIL!");
 }
 
 void LEDS ( const unsigned char enable )
