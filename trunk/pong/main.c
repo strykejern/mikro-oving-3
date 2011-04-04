@@ -6,8 +6,8 @@
 #include <unistd.h>			//For sleep
 #include <time.h>			//For random seed
 
+#include "driver_interface.h"
 #include "pong.h"
-
 
 static char *lcd;
 
@@ -75,7 +75,8 @@ int main()
 	short xSpeed, ySpeed;
 	int count = 0;
 
-	printf( "version 11\n" );
+	//Initialize the drivers
+	initalize_driver();
 
 	//Initialize random number generator
 	srand( time(NULL) );
@@ -118,6 +119,8 @@ int main()
 	//Main game loop
 	while( 1 )
 	{
+		if( BUTTONS() ) break;
+
 		theBall.xPos += theBall.xSpeed;
 		theBall.yPos += theBall.ySpeed;
 
@@ -142,6 +145,7 @@ int main()
 
 		printf("Finished frame %d\n", count);
 		count++;
+		LEDS(count);
 		if( count >= 30*10 ) break;
 	}
 

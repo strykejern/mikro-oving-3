@@ -2,6 +2,8 @@
 #include <fcntl.h>
 #include <stdio.h>
 
+#include "driver_interface.h"
+
 static int driver;
 
 void initialize_driver()
@@ -9,7 +11,7 @@ void initialize_driver()
 	driver = open("/dev/stk1000_driver", O_RDWR);
 }
 
-void LEDS ( const char enable )
+void LEDS ( const unsigned char enable )
 {
 	int bytes_written;
 	
