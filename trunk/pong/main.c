@@ -122,7 +122,7 @@ int main()
 	if( rand() & 1 ) xSpeed = -xSpeed;
 	if( rand() & 1 ) ySpeed = -ySpeed;
 	theBall.xSpeed = xSpeed;
-	theBall.ySpeed = ySpeed;
+//	theBall.ySpeed = ySpeed;
 
 
 	//Main game loop
