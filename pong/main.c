@@ -136,11 +136,11 @@ int main()
 		draw_ball();
 
 		//Busy wait
-		usleep(1000000/30);	//30 frames per second
+		usleep(30000);	//30 frames per second
 
 		printf("Finished frame %d\n", count);
 		count++;
-		if( count >= 100 ) break;
+		if( count >= 5 ) break;
 	}
 
 
