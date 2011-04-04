@@ -73,6 +73,7 @@ int main()
 	int file;
 	short xSpeed, ySpeed;
 //	long delay;
+	int count = 0;
 
 	printf( "version 11\n" );
 
@@ -139,7 +140,9 @@ int main()
 //		while(delay > 0) delay--;
 //		delay = 250000;
 
-		printf("Finished frame\n");
+		printf("Finished frame %d\n", count);
+		count++;
+		if( count >= 100 ) break;
 	}
 
 
