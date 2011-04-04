@@ -24,14 +24,31 @@ void draw_one_pixel(short x, short y, COLOR color )
 	lcd[index + 3] = color.r;		//R
 }
 
+void clear_paddle( paddle_t whichPaddle )
+{
+	int i, j;
+	for( i = whichPaddle.xPos; i < whichPaddle.xPos+PADDLE_WIDTH; i++ ) 
+	{
+		for( j = whichPaddle.yPos; j < whichPaddle.yPos+PADDLE_HEIGHT; j++ )
+		{
+			draw_one_pixel( i, j, COLOR_BLACK );
+		}
+	}
+}
+
 void draw_paddle( paddle_t whichPaddle )
 {
 	int i, j;
-	
+
 	//Only draw if we have moved since last frame
 	if( whichPaddle.oldY != whichPaddle.yPos )
 	{
 		whichPaddle.oldY = whichPaddle.yPos;
+
+		//First clear old paddle
+		clear_paddle( whichPaddle );
+
+		//Then draw the new one
 		for( i = whichPaddle.xPos; i < whichPaddle.xPos+PADDLE_WIDTH; i++ ) 
 		{
 			for( j = whichPaddle.yPos; j < whichPaddle.yPos+PADDLE_HEIGHT; j++ )
@@ -42,11 +59,10 @@ void draw_paddle( paddle_t whichPaddle )
 	}
 }
 
-void draw_ball()
+void clear_ball()
 {
 	int i, j;
 
-	//Clear old ball
 	for( i = theBall.oldXPos; i < theBall.oldXPos+BALL_SIZE; i++ ) 
 	{
 		for( j = theBall.oldYPos; j < theBall.oldYPos+BALL_SIZE; j++ )
@@ -54,6 +70,14 @@ void draw_ball()
 			draw_one_pixel( i, j, COLOR_BLACK);
 		}
 	}
+}
+
+void draw_ball()
+{
+	int i, j;
+
+	//Clear old ball
+	clear_ball();
 
 	//Draw new ball
 	for( i = theBall.xPos; i < theBall.xPos+BALL_SIZE; i++ ) 
@@ -80,6 +104,9 @@ char paddle_collides( paddle_t whichPaddle )
 void reset_ball()
 {
 	short xSpeed, ySpeed;
+
+	//Remove old ball first
+	clear_ball();
 
 	//Middle of the screen
 	theBall.oldXPos = theBall.xPos = 160;
