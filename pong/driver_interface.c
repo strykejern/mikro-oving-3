@@ -13,7 +13,7 @@ void initialize_driver()
 	if (driver == -1) printf("DRIVER FAIL!");
 }
 
-void LEDS ( const unsigned char enable )
+void LEDS ( const int enable )
 {
 	int bytes_written;
 	
