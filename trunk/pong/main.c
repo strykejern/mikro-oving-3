@@ -68,6 +68,12 @@ void draw_ball()
 	theBall.oldYPos = theBall.yPos;
 }
 
+char paddle_collides( paddle_t whichPaddle )
+{
+//	if( theBall.x 
+	return 0;
+}
+
 //Program entry
 int main()
 {	
@@ -149,12 +155,15 @@ int main()
 			theBall.xSpeed = -theBall.xSpeed;
 		}
 
+		//Collide with paddles
+		if( paddle_collides(player1) );
+
 		draw_paddle( player1 );
 		draw_paddle( player2 );	
 		draw_ball();
 
-		//Busy wait
-		usleep(1000000/30);	//30 frames per second
+		//Take it easy, relax a bit
+		usleep(SLEEP_PER_FRAME);	//30 frames per second
 
 //		printf("Finished frame %d\n", count);
 		count++;
