@@ -20,6 +20,8 @@ void LEDS ( int enable )
 	int bytes_written;
 	
 	bytes_written = write( driver, &leds, sizeof(leds) );
+	
+	leds = 0x00;
 }
 
 int BUTTONS ()
