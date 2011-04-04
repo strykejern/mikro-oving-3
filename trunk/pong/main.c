@@ -14,7 +14,7 @@ static char *lcd;
 static paddle_t player1;
 static paddle_t player2;
 static ball_t theBall;
-static char game_active = 1;
+static bool game_active = true;
 
 void draw_one_pixel(short x, short y, COLOR color )
 {
@@ -88,13 +88,13 @@ void draw_ball()
 	theBall.oldYPos = theBall.yPos;
 }
 
-char paddle_collides( paddle_t *whichPaddle, ball_t *whichBall )
+bool paddle_collides( paddle_t *whichPaddle, ball_t *whichBall )
 {
 	if( whichBall->xPos+BALL_SIZE >= whichPaddle->xPos 
 	 && whichBall->yPos+BALL_SIZE >= whichPaddle->yPos
 	 && whichBall->xPos <= whichPaddle->xPos + PADDLE_WIDTH 
-	 && whichBall->yPos <= whichPaddle->yPos + PADDLE_HEIGHT ) return 1;
-	return 0;
+	 && whichBall->yPos <= whichPaddle->yPos + PADDLE_HEIGHT ) return true;
+	return false;
 }
 
 void reset_ball()
@@ -133,19 +133,19 @@ void read_input()
 	else if( 2 == (input & 2) )			//player 2 down
 	{
 		player2.yPos+=5;	
-		if( player1.yPos < 0 ) player1.yPos = 0;
+		if( player2.yPos+PADDLE_HEIGHT > 239 ) player2.yPos = 240-PADDLE_HEIGHT-1;
 	}
 
 	//Player 1 Controls
 	if( 128 == (input & 128) ) 			//player 1 up
 	{
 		player1.yPos-=5;	
-		if( player1.yPos+PADDLE_HEIGHT > 239 ) player1.yPos = 240-PADDLE_HEIGHT-1;
+		if( player1.yPos < 0 ) player1.yPos = 0;
 	}
 	else if( 64 == (input & 64) ) 			//player 1 down
 	{
 		player1.yPos+=5;	
-		if( player2.yPos+PADDLE_HEIGHT > 239 ) player2.yPos = 240-PADDLE_HEIGHT-1;
+		if( player1.yPos+PADDLE_HEIGHT > 239 ) player1.yPos = 240-PADDLE_HEIGHT-1;
 	}
 }
 
@@ -190,6 +190,13 @@ void update_physics()
 		theBall.xSpeed = -theBall.xSpeed - 1;
 		theBall.xPos += theBall.xSpeed;
 	}
+}
+
+void render_screen()
+{
+	draw_paddle( &player1 );
+	draw_paddle( &player2 );	
+	draw_ball();
 }
 
 //Program entry
@@ -238,9 +245,7 @@ int main()
 		update_physics();
 
 		//Draw this frame
-		draw_paddle( &player1 );
-		draw_paddle( &player2 );	
-		draw_ball();
+		render_screen();
 
 		//Take it easy, relax a bit
 		usleep(SLEEP_PER_FRAME);	//30 frames per second
@@ -248,7 +253,7 @@ int main()
 		LEDS(0xFF);
 	}
 
-	//Clear screen
+	//Clear screen on exit
 	memset( lcd, 0, 320*240*4 );
 
 	return EXIT_SUCCESS;

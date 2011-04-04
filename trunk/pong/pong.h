@@ -1,5 +1,7 @@
 #ifndef PONG_HEADER_INCLUDED
 #define PONG_HEADER_INCLUDED
+
+#include <stdbool.h>			//Booleans
  
 #define PADDLE_WIDTH 15
 #define PADDLE_HEIGHT 50
