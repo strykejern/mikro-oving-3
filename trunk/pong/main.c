@@ -151,7 +151,7 @@ void read_input()
 
 void LED_update_score()
 {
-	unsigned char leds;
+	unsigned char leds = 0;
 	leds |= 1*(player2.score >= 1); 
 	leds |= 2*(player2.score >= 2); 
 	leds |= 4*(player2.score >= 3); 
