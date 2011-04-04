@@ -77,11 +77,27 @@ char paddle_collides( paddle_t whichPaddle )
 	return 0;
 }
 
+void reset_ball()
+{
+	short xSpeed, ySpeed;
+
+	//Middle of the screen
+	theBall.oldXPos = theBall.xPos = 160;
+	theBall.oldYPos = theBall.yPos = 120;
+
+	//Randomize ball velocity
+	xSpeed = 1 + rand() % 3;
+	ySpeed = 1 + rand() % 3;
+	if( rand() & 1 ) xSpeed = -xSpeed;
+	if( rand() & 1 ) ySpeed = -ySpeed;
+	theBall.xSpeed = xSpeed;
+	theBall.ySpeed = ySpeed;
+}
+
 //Program entry
 int main()
 {	
 	int file;
-	short xSpeed, ySpeed;
 	int count = 0;
 
 	//Initialize the drivers
@@ -113,23 +129,22 @@ int main()
 	player2.c.b = 0;
 
 	//Initialize the ball
-	theBall.oldXPos = theBall.xPos = 160;
-	theBall.oldYPos = theBall.yPos = 120;
-
-	//Randomize ball velocity
-	xSpeed = 1 + rand() % 3;
-	ySpeed = 1 + rand() % 3;
-	if( rand() & 1 ) xSpeed = -xSpeed;
-	if( rand() & 1 ) ySpeed = -ySpeed;
-	theBall.xSpeed = xSpeed;
-//	theBall.ySpeed = ySpeed;
+	reset_ball();
 
 
 	//Main game loop
 	while( 1 )
 	{
-		if( BUTTONS() ) break;
+		//Read input
+		int input = BUTTONS();
+		if( 8 == (input & 8) ) break;			//quit
+		if( 1 == (input & 1) ) player2.yPos--;		//player 2 up
+		if( 2 == (input & 2) ) player2.yPos++;		//player 2 down
+		if( 128 == (input & 128) ) player1.yPos--;	//player 1 up
+		if( 64 == (input & 64) ) player1.yPos++;		//player 1 down
 
+
+		//Move the ball
 		theBall.xPos += theBall.xSpeed;
 		theBall.yPos += theBall.ySpeed;
 
@@ -148,13 +163,13 @@ int main()
 		//Collide with left and right
 		if( theBall.xPos <= 0 )
 		{
-			theBall.xPos = 0;
-			theBall.xSpeed = -theBall.xSpeed;
+			//player 1 loses
+			reset_ball();
 		}
 		else if( theBall.xPos+BALL_SIZE >= 320 )
 		{
-			theBall.xPos = 320-BALL_SIZE;
-			theBall.xSpeed = -theBall.xSpeed;
+			//player 2 loses
+			reset_ball();
 		}
 
 		//Collide with paddles
