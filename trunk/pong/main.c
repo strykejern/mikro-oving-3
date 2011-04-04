@@ -107,8 +107,8 @@ int main()
 	theBall.oldYPos = theBall.yPos = 120;
 
 	//Randomize ball velocity
-	xSpeed = 1;
-	ySpeed = 1;
+	xSpeed = 1 + rand() % 3;
+	ySpeed = 1 + rand() % 3;
 	if( rand() & 1 ) xSpeed = -xSpeed;
 	if( rand() & 1 ) ySpeed = -ySpeed;
 	theBall.xSpeed = xSpeed;
