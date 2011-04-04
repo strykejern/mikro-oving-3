@@ -14,6 +14,7 @@ static char *lcd;
 static paddle_t player1;
 static paddle_t player2;
 static ball_t theBall;
+static char game_active = 1;
 
 void draw_one_pixel(short x, short y, COLOR color )
 {
@@ -116,11 +117,85 @@ void reset_ball()
 	theBall.ySpeed = ySpeed;
 }
 
+void read_input()
+{
+	int input = BUTTONS();
+
+	//Exit game button
+	if( 8 == (input & 8) ) game_active = 0;		//quit
+
+	//Player 2 Controls
+	if( 1 == (input & 1) ) 				//player 2 up
+	{
+		player2.yPos-=5;		
+		if( player2.yPos < 0 ) player2.yPos = 0;
+	}
+	else if( 2 == (input & 2) )			//player 2 down
+	{
+		player2.yPos+=5;	
+		if( player1.yPos < 0 ) player1.yPos = 0;
+	}
+
+	//Player 1 Controls
+	if( 128 == (input & 128) ) 			//player 1 up
+	{
+		player1.yPos-=5;	
+		if( player1.yPos+PADDLE_HEIGHT > 239 ) player1.yPos = 240-PADDLE_HEIGHT-1;
+	}
+	else if( 64 == (input & 64) ) 			//player 1 down
+	{
+		player1.yPos+=5;	
+		if( player2.yPos+PADDLE_HEIGHT > 239 ) player2.yPos = 240-PADDLE_HEIGHT-1;
+	}
+}
+
+void update_physics()
+{
+	//Move the ball
+	theBall.xPos += theBall.xSpeed;
+	theBall.yPos += theBall.ySpeed;
+
+	//Collide with top and bottom
+	if( theBall.yPos <= 0 )
+	{
+		theBall.yPos = 0;
+		theBall.ySpeed = -theBall.ySpeed;
+	}
+	else if( theBall.yPos+BALL_SIZE >= 240 )
+	{
+		theBall.yPos = 240-BALL_SIZE;
+		theBall.ySpeed = -theBall.ySpeed;
+	}
+
+	//Collide with left and right
+	if( theBall.xPos <= 0 )
+	{
+		//player 1 loses
+		reset_ball();
+	}
+	else if( theBall.xPos+BALL_SIZE >= 320 )
+	{
+		//player 2 loses
+		reset_ball();
+	}
+
+	//Collide with paddles
+	if( paddle_collides(&player1, &theBall) )
+	{
+		theBall.xSpeed = -theBall.xSpeed + 1;
+		theBall.xPos += theBall.xSpeed;
+	}
+	else if( paddle_collides(&player2, &theBall) )
+	{
+		theBall.xSpeed = -theBall.xSpeed - 1;
+		theBall.xPos += theBall.xSpeed;
+	}
+}
+
 //Program entry
 int main()
 {	
 	int file;
-	int count = 0;
 
 	//Initialize the drivers
 	initialize_driver();
@@ -153,64 +228,16 @@ int main()
 	//Initialize the ball
 	reset_ball();
 
-
 	//Main game loop
-	while( 1 )
+	while( game_active )
 	{
 		//Read input
-		int input = BUTTONS();
-		if( 8 == (input & 8) ) break;			//quit
-		if( 1 == (input & 1) ) player2.yPos-=5;		//player 2 up
-		else if( 2 == (input & 2) ) player2.yPos+=5;	//player 2 down
-		if( 128 == (input & 128) ) player1.yPos-=5;	//player 1 up
-		else if( 64 == (input & 64) ) player1.yPos+=5;	//player 1 down
+		read_input();
 
-		if( player1.yPos < 0 ) player1.yPos = 0;
-		if( player2.yPos < 0 ) player2.yPos = 0;
-		if( player1.yPos+PADDLE_HEIGHT > 240 ) player1.yPos = 240-PADDLE_HEIGHT;
-		if( player2.yPos+PADDLE_HEIGHT > 240 ) player2.yPos = 240-PADDLE_HEIGHT;
+		//Make stuff move and collide
+		update_physics();
 
-
-		//Move the ball
-		theBall.xPos += theBall.xSpeed;
-		theBall.yPos += theBall.ySpeed;
-
-		//Collide with top and bottom
-		if( theBall.yPos <= 0 )
-		{
-			theBall.yPos = 0;
-			theBall.ySpeed = -theBall.ySpeed;
-		}
-		else if( theBall.yPos+BALL_SIZE >= 240 )
-		{
-			theBall.yPos = 240-BALL_SIZE;
-			theBall.ySpeed = -theBall.ySpeed;
-		}
-
-		//Collide with left and right
-		if( theBall.xPos <= 0 )
-		{
-			//player 1 loses
-			reset_ball();
-		}
-		else if( theBall.xPos+BALL_SIZE >= 320 )
-		{
-			//player 2 loses
-			reset_ball();
-		}
-
-		//Collide with paddles
-		if( paddle_collides(&player1, &theBall) )
-		{
-			theBall.xSpeed = -theBall.xSpeed + 1;
-			theBall.xPos += theBall.xSpeed;
-		}
-		else if( paddle_collides(&player2, &theBall) )
-		{
-			theBall.xSpeed = -theBall.xSpeed - 1;
-			theBall.xPos += theBall.xSpeed;
-		}
-
+		//Draw this frame
 		draw_paddle( &player1 );
 		draw_paddle( &player2 );	
 		draw_ball();
@@ -218,8 +245,6 @@ int main()
 		//Take it easy, relax a bit
 		usleep(SLEEP_PER_FRAME);	//30 frames per second
 
-//		printf("Finished frame %d\n", count);
-		count++;
 		LEDS(0xFF);
 	}
 
