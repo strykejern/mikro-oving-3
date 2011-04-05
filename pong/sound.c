@@ -13,9 +13,9 @@
 
 static const int BUFFER_SIZE = 2048;
 
-static const int LOWER_VOLUME = 2;
+static const int LOWER_VOLUME = 64;
 
-static int SAMPLE_RATE = 88200;
+static int SAMPLE_RATE = 44100;
 
 static FILE *music;
 
