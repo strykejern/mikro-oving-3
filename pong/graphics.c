@@ -1,69 +1,87 @@
-#include <sys/mman.h>			//For memory mapping
-#include <fcntl.h>			//for open()
-#include <string.h>			//for memcpy()
-
+#include "pong.h"
 #include "graphics.h"
 
-//Private variables
-static char buffer[320*240*4];
-static char *lcd;
-
-static int screen_width;
-static int screen_height;
-static int screen_bytes;
-static int bytes_per_pixel;
-
-void draw_one_pixel(const short x, const short y, COLOR color )
+//Draw one paddle
+void draw_paddle( paddle_t *whichPaddle )
 {
-	int index = (x * 4) + (y * 1280);
-	buffer[index + 0] = color.a;		//A
-	buffer[index + 1] = color.b;		//B
-	buffer[index + 2] = color.g;		//G
-	buffer[index + 3] = color.r;		//R
+	int i, j;
+
+	//Only draw if we have moved since last frame
+	if( whichPaddle->oldY != whichPaddle->yPos )
+	{
+
+		//First clear old paddle
+		for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
+		{
+			for( j =whichPaddle->oldY; j < whichPaddle->oldY+PADDLE_HEIGHT; j++ )
+			{
+				draw_one_pixel( i, j, COLOR_BLACK );
+			}
+		}
+		whichPaddle->oldY = whichPaddle->yPos;
+
+		//Then draw the new one
+		for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
+		{
+			for( j = whichPaddle->yPos; j < whichPaddle->yPos+PADDLE_HEIGHT; j++ )
+			{
+				draw_one_pixel( i, j, whichPaddle->c );
+			}
+		}
+	}
 }
 
-void initialize_video( const int width, const int height, const int depth )
+//This clears the pong ball
+void clear_ball( ball_t *whichBall )
 {
-	int file;
+	int i, j;
 
-	screen_width = width;
-	screen_height = height;
-	bytes_per_pixel = depth >> 3;
-	screen_bytes = screen_width*screen_height*bytes_per_pixel;
-
-	//Open the LDC driver file in read/write mode
-	file = open("/dev/fb0", O_RDWR);
-
-	//memory map file to array (4 bytes * 320x240 pixles)
-	lcd = (char*) mmap(0, screen_bytes, PROT_WRITE | PROT_READ, MAP_SHARED, file, 0);
-
-	//Clear screen
-	clear_screen();
+	for( i = whichBall->oldXPos; i < whichBall->oldXPos+BALL_SIZE; i++ ) 
+	{
+		for( j = whichBall->oldYPos; j < whichBall->oldYPos+BALL_SIZE; j++ )
+		{
+			draw_one_pixel( i, j, COLOR_BLACK);
+		}
+	}
 }
 
-void clear_screen()
+//Draws a single pong ball
+void draw_ball( ball_t *whichBall )
 {
-	//Clear the screen with black pixels
-	memset( lcd, 0, screen_bytes );
+	int i, j;
 
-	//Clear the buffer as well
-	memset( buffer, 0, screen_bytes );
+	//Clear old ball
+	clear_ball( whichBall );
+
+	//Draw new ball
+	for( i = whichBall->xPos; i < whichBall->xPos+BALL_SIZE; i++ ) 
+	{
+		for( j = whichBall->yPos; j < whichBall->yPos+BALL_SIZE; j++ )
+		{
+			draw_one_pixel( i, j, COLOR_WHITE );
+		}
+	}
+
+	whichBall->oldXPos = whichBall->xPos;
+	whichBall->oldYPos = whichBall->yPos;
 }
 
-//Swaps between the buffer and the actual LCD screen
-//should be called at the end of every frame
-void flip_buffers()
+//Draw all the game components
+void render_screen()
 {
-	memcpy( lcd, buffer, sizeof(buffer) );
-}
+	int i;
 
-int get_screen_width()
-{
-	return screen_width;
-}
+	//Draw both paddles
+	draw_paddle( &player1 );
+	draw_paddle( &player2 );
 
-int get_screen_height()
-{
-	return screen_height;
-}
+	//Draw all active balls
+	for( i = 0; i < MAX_BALLS; i++ )
+	{
+		if( !ballList[i].enabled ) break;
+		draw_ball( &ballList[i] );
+	}
 
+	//Show the result on the LCD
+	flip_buffers();
+}
