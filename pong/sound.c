@@ -15,6 +15,8 @@ static const int BUFFER_SIZE = 2048;
 
 static const int LOWER_VOLUME = 32;
 
+static const int SAMPLE_RATE = 44100;
+
 static FILE *music;
 
 static int sound_driver;
@@ -25,6 +27,7 @@ void initialize_sound_driver()
 
 	music = fopen("09-the-moon.au", "r");
 	
+	ioctl( sound_driver, SOUND_PCM_WRITE_RATE, SAMPLE_RATE );
 }
 
 void play_sound(FILE *sound_file)
