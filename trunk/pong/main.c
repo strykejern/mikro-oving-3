@@ -274,10 +274,10 @@ void do_ball_collision( ball_t * whichBall )
 			//move back to safe position
 			short x = whichBall->xPos;
 			short y = whichBall->yPos;
-			whichBall->xPos += whichBall->xPos-ballList[i].xPos;
-			whichBall->yPos += whichBall->yPos-ballList[i].yPos;
-			ballList[i].xPos += ballList[i].xPos-x;
-			ballList[i].yPos += ballList[i].yPos-y;
+			whichBall->xPos += (whichBall->xPos-ballList[i].xPos)/2;
+			whichBall->yPos += (whichBall->yPos-ballList[i].yPos)/2;
+			ballList[i].xPos += (ballList[i].xPos-x)/2;
+			ballList[i].yPos += (ballList[i].yPos-y)/2;
 
 			//swap velocities!
 			x = whichBall->xSpeed;
