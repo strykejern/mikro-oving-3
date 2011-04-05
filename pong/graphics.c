@@ -98,14 +98,14 @@ void render_screen()
 	flip_buffers();
 }
 
-void circle_fill(int centerX,int centerY, int radius, COLOR c)
+void circle_fill(int centerX, int centerY, int radius, COLOR c)
 {
 	//Bresenhams circle algrotitm
 	int d = 3 - (2 * radius);
 	int x = 0;
 	int y = radius;
 		
-	while( x != y )
+	for( x = 0; x < y; y++ )
 	{
 		//Draw the 8 circle pixels
 		draw_one_pixel(centerX + x, centerY + y, c);
