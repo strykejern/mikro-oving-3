@@ -87,7 +87,7 @@ const bool NumberBitmap[50][4] = {
 };
 
 
-void draw_number(int x, int y, char num, COLOR c);
+void draw_number(int x, int y, int num, COLOR c);
 
 //Draw one paddle
 void draw_paddle( paddle_t *whichPaddle )
@@ -180,7 +180,7 @@ void render_screen()
 	flip_buffers();
 }
 
-void draw_number(int x, int y, char num, COLOR c)
+void draw_number(int x, int y, int num, COLOR c)
 {
 	int i;
 	int j;
@@ -190,7 +190,7 @@ void draw_number(int x, int y, char num, COLOR c)
 		for(i = 0; i < 4; i++)
 		{
 			if(NumberBitmap[(num * 5) + j][i])
-				draw_one_pixel(x + i, y + j, c);
+				draw_one_pixel(x + j, y + i, c);
 		}
 	}
 }
