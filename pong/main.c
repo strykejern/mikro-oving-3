@@ -40,8 +40,8 @@ int main()
 	initialize_video(320, 240, 32);
 
 	//Initialize the sound driver
-//	initialize_sound_driver();
-//	play_music();
+	initialize_sound_driver();
+	play_music();
 
 	//Initialize the players
 	initialize_players();
@@ -74,6 +74,7 @@ int main()
 	return EXIT_SUCCESS;
 }
 
+//Draw one paddle
 void draw_paddle( paddle_t *whichPaddle )
 {
 	int i, j;
@@ -174,32 +175,30 @@ void read_input()
 {
 	int input = BUTTONS();
 
-	printf("Read buttons: %d", input);
-
 	//Exit game button
 	if( 8 == (input & 8) ) game_active = 0;		//quit
 
 	//Player 2 Controls
 	if( 1 == (input & 1) ) 				//player 2 up
 	{
-		player2.yPos-=5;		
+		player2.yPos-=7;		
 		if( player2.yPos < 0 ) player2.yPos = 0;
 	}
 	else if( 2 == (input & 2) )			//player 2 down
 	{
-		player2.yPos+=5;	
+		player2.yPos+=7;	
 		if( player2.yPos+PADDLE_HEIGHT > 239 ) player2.yPos = 240-PADDLE_HEIGHT-1;
 	}
 
 	//Player 1 Controls
 	if( 128 == (input & 128) ) 			//player 1 up
 	{
-		player1.yPos-=5;	
+		player1.yPos-=7;	
 		if( player1.yPos < 0 ) player1.yPos = 0;
 	}
 	else if( 64 == (input & 64) ) 			//player 1 down
 	{
-		player1.yPos+=5;	
+		player1.yPos+=7;	
 		if( player1.yPos+PADDLE_HEIGHT > 239 ) player1.yPos = 240-PADDLE_HEIGHT-1;
 	}
 }
