@@ -1,5 +1,9 @@
+#include <math.h>	//for circle drawing
+
 #include "pong.h"
 #include "graphics.h"
+
+void circle_fill(int centerX,int centerY, int radius, COLOR c);
 
 //Draw one paddle
 void draw_paddle( paddle_t *whichPaddle )
@@ -48,6 +52,13 @@ void clear_ball( ball_t *whichBall )
 //Draws a single pong ball
 void draw_ball( ball_t *whichBall )
 {
+	//Clear old ball
+	circle_fill(whichBall->xPos, whichBall->yPos, BALL_SIZE, COLOR_BLACK);
+
+	//Draw new ball
+	circle_fill(whichBall->xPos, whichBall->yPos, BALL_SIZE, COLOR_WHITE);
+
+/*
 	int i, j;
 
 	//Clear old ball
@@ -61,6 +72,7 @@ void draw_ball( ball_t *whichBall )
 			draw_one_pixel( i, j, COLOR_WHITE );
 		}
 	}
+*/
 
 	whichBall->oldXPos = whichBall->xPos;
 	whichBall->oldYPos = whichBall->yPos;
@@ -84,4 +96,36 @@ void render_screen()
 
 	//Show the result on the LCD
 	flip_buffers();
+}
+
+void circle_fill(int centerX,int centerY, int radius, COLOR c)
+{
+	//Bresenhams circle algrotitm
+	int d = 3 - (2 * radius);
+	int x = 0;
+	int y = radius;
+		
+	while( x != y )
+	{
+		//Draw the 8 circle pixels
+		draw_one_pixel(centerX + x, centerY + y, c);
+		draw_one_pixel(centerX + x, centerY - y, c);
+		draw_one_pixel(centerX - x, centerY + y, c);
+		draw_one_pixel(centerX - x, centerY - y, c);
+		draw_one_pixel(centerX + y, centerY + x, c);
+		draw_one_pixel(centerX + y, centerY - x, c);
+		draw_one_pixel(centerX - y, centerY + x, c);
+		draw_one_pixel(centerX - y, centerY - x, c);
+		
+		//Now for each pixel we do the following operations
+		if (d < 0)
+		{
+			d = d + (4 * x) + 6;
+		}
+		else
+		{
+			d = d + 4 * (x - y) + 10;
+			y = y - 1;
+		}
+	}
 }
