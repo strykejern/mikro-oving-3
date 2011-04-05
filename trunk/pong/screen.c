@@ -55,7 +55,11 @@ void clear_screen()
 //should be called at the end of every frame
 void flip_buffers()
 {
+	//copy from buffer to screen
 	memcpy( lcd, buffer, sizeof(buffer) );
+
+	//Clear the old buffer
+	memset( buffer, 0, screen_bytes );
 }
 
 int get_screen_width()

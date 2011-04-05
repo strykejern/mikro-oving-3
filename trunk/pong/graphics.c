@@ -60,7 +60,7 @@ void draw_paddle( paddle_t *whichPaddle )
 	int i, j;
 
 	//Only draw if we have moved since last frame
-	if( whichPaddle->oldY != whichPaddle->yPos )
+	//if( whichPaddle->oldY != whichPaddle->yPos )
 	{
 
 		//First clear old paddle
