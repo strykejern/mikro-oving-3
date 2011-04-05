@@ -235,7 +235,7 @@ int main()
 	file = open("/dev/fb0", O_RDWR);
 
 	initialize_sound_driver();
-	play_music();
+	//play_music();
 
 	//memory map file to array (4 bytes * 320x240 pixles)
 	lcd = (char*) mmap(0, 320*240*4, PROT_WRITE | PROT_READ, MAP_SHARED, file, 0);
