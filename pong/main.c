@@ -237,14 +237,14 @@ int main()
 	sound = open("/dev/dsp", O_RDWR);
 	ioctl(sound, SOUND_PCM_WRITE_RATE, &sample_rate);
 
-	int sound_file;
-	sound_file = open("09-the-moon.wav", O_RDWR);
+	FILE *sound_file;
+	sound_file = fopen("09-the-moon.wav", "w");
 
 	int bytes_written;
-	while( !BUTTONS() && sound_file != -1 )
+	while( !BUTTONS() && !fseek(sound_file, 8, SEEK_CUR) )
 	{
 		int sound_data;
-		read( sound_file, &sound_data, 8 );
+		fread( &sound_data, 8, 1, sound_file);
 		bytes_written = write( sound, &sound_data, 8 );
 		//usleep( 1 );
 	}
