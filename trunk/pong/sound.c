@@ -7,7 +7,6 @@
 
 #include <linux/soundcard.h>
 
-#include "pong.h"
 #include "driver_interface.h"
 #include "sound.h"
 

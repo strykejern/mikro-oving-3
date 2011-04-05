@@ -12,14 +12,6 @@
 #define SLEEP_PER_FRAME 1000000 / FRAMES_PER_SECOND	
 
 
-typedef struct color_s
-{
-	unsigned char r;
-	unsigned char g;
-	unsigned char b;
-	unsigned char a;
-} COLOR;
-
 typedef struct paddle_s
 {
 	short xPos;
@@ -39,8 +31,5 @@ typedef struct ball_s
 	short ySpeed;
 } ball_t;
 
-
-const static COLOR COLOR_BLACK = {0, 0, 0, 0};
-const static COLOR COLOR_WHITE = {255, 255, 255, 0};
 
 #endif	/* PONG_HEADER_INCLUDED */
