@@ -141,13 +141,26 @@ void render_screen()
 
 	//Draw player names
 	draw_player( 10, 10, player1.c );
-	draw_number( 40, 20, 1, player1.c );
+	draw_number( 40, 10, 1, player1.c );
 	draw_player( get_screen_width()-60, 10, player2.c );
-	draw_number( get_screen_width()-20, 20, 2, player2.c );
+	draw_number( get_screen_width()-20, 10, 2, player2.c );
 
 	//Draw both paddles
 	draw_paddle( &player1 );
 	draw_paddle( &player2 );
+
+	//Draw player 1 score
+	draw_number( (get_screen_width()/2)-15, 10, player1.score, player1.c );
+
+	//Draw a line between scores
+	for( i = (get_screen_width()/2)-5; i < 10; i++ )
+	{
+		draw_one_pixel(i, 5, COLOR_WHITE);
+	}
+
+	//Draw player 2 score
+	draw_number( (get_screen_width()/2)+15, 10, player2.score, player2.c );
+
 
 	//Draw all active balls
 	for( i = 0; i < MAX_BALLS; i++ )
