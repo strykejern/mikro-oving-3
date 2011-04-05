@@ -14,7 +14,7 @@ static const int BUFFER_SIZE = 2048;
 
 static const int LOWER_VOLUME = 32;
 
-static const int SAMPLE_RATE = 44100;
+static int SAMPLE_RATE = 44100;
 
 static FILE *music;
 
@@ -38,6 +38,7 @@ void play_sound(FILE *sound_file)
 	
 	while ( !feof(sound_file) && !BUTTONS() ) // While not at EOF
 	{
+		printf(".");
 		if ( bytes_read )
 		{
 			int i;
@@ -49,7 +50,7 @@ void play_sound(FILE *sound_file)
 		}
 		else
 		{
-			printf("No bytes read, BUG!\n");
+			printf("\nNo bytes read, BUG!\n");
 		}
 		
 		bytes_read = fread( buffer, 1, BUFFER_SIZE, sound_file );
