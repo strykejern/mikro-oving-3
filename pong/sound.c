@@ -26,7 +26,7 @@ void initialize_sound_driver()
 
 	music = fopen("09-the-moon.au", "r");
 	
-	ioctl( sound_driver, SOUND_PCM_WRITE_RATE, SAMPLE_RATE );
+	ioctl( sound_driver, SOUND_PCM_WRITE_RATE, &SAMPLE_RATE );
 }
 
 void play_sound(FILE *sound_file)
