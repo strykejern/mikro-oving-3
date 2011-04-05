@@ -40,8 +40,8 @@ int main()
 	initialize_video(320, 240, 32);
 
 	//Initialize the sound driver
-	initialize_sound_driver();
-	play_music();
+//	initialize_sound_driver();
+//	play_music();
 
 	//Initialize the players
 	initialize_players();
@@ -173,6 +173,8 @@ void reset_ball( ball_t *whichBall )
 void read_input()
 {
 	int input = BUTTONS();
+
+	printf("Read buttons: %d", input);
 
 	//Exit game button
 	if( 8 == (input & 8) ) game_active = 0;		//quit
