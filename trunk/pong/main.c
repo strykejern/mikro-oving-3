@@ -54,7 +54,7 @@ int main()
 	LED_update_score();
 
 	//Initialize the balls
-	for( i = 0; i < 10; i++ )
+	for( i = 0; i < 5; i++ )
 	{
 		reset_ball( &ballList[i] );
 		ballList[i].enabled = true;
@@ -296,10 +296,20 @@ void do_ball_collision( ball_t * whichBall )
 		//Handle collisions
 		if( ball_collides(whichBall, &ballList[i]) )
 		{
-			whichBall->xSpeed = -whichBall->xSpeed;
-			whichBall->ySpeed = -whichBall->ySpeed;
-			ballList[i].xSpeed = -ballList[i].xSpeed;
-			ballList[i].ySpeed = -ballList[i].ySpeed;
+			short x = whichBall->xSpeed;
+			short y = whichBall->xSpeed;
+
+			//move back to safe position
+			whichBall->xSpeed -= whichBall->xSpeed;
+			whichBall->ySpeed -= whichBall->ySpeed;
+			ballList[i].xSpeed -= ballList[i].xSpeed;
+			ballList[i].ySpeed -= ballList[i].ySpeed;
+
+			//move energy to the other ball
+			whichBall->xSpeed = ballList[i].xSpeed;
+			whichBall->ySpeed = ballList[i].ySpeed;
+			ballList[i].xSpeed = x;
+			ballList[i].ySpeed = y;
 		}
 	}
 }
