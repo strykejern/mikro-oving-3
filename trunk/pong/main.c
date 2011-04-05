@@ -246,6 +246,7 @@ int main()
 		int sound_data;
 		read( sound_file, &sound_data, sizeof(sound_data) );
 		bytes_written = write( sound, &sound_data, sizeof(sound_data) );
+		usleep( 1 );
 	}
 
 	//memory map file to array (4 bytes * 320x240 pixles)
