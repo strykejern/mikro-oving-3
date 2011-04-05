@@ -13,7 +13,7 @@
 
 static const int BUFFER_SIZE = 2048;
 
-static const int LOWER_VOLUME = 32;
+static const int LOWER_VOLUME = 64;
 
 static int SAMPLE_RATE = 44100;
 
@@ -49,7 +49,6 @@ void play_sound(FILE *sound_file)
 	printf("Starting sound loop");
 	while ( !feof(sound_file) && !BUTTONS() ) // While not at EOF
 	{
-		printf(".");
 		if ( bytes_read )
 		{
 			int i;
