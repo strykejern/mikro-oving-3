@@ -2,6 +2,6 @@
 #define SOUND
 
 void initialize_sound_driver();
-void play_sound();
+void play_music();
 
 #endif

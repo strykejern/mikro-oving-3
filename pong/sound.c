@@ -13,6 +13,8 @@
 
 static const int BUFFER_SIZE = 2048;
 
+static const int LOWER_VOLUME = 32;
+
 static FILE *music;
 
 static int sound_driver;
@@ -21,9 +23,12 @@ void initialize_sound_driver()
 {
 	sound_driver = open("/dev/dsp", O_WRONLY);
 
-	FILE *sound_file;
-	sound_file = fopen("09-the-moon.au", "r");
+	music = fopen("09-the-moon.au", "r");
 	
+}
+
+void play_sound(FILE *sound_file)
+{
 	unsigned char *buffer = malloc(BUFFER_SIZE * sizeof(char) + 1); // Allocate buffer
 	
 	int bytes_read = fread( buffer, 1, BUFFER_SIZE, sound_file );
@@ -36,7 +41,7 @@ void initialize_sound_driver()
 			int i;
 			for (i = 0; i < bytes_read; i++)
 			{
-				buffer[i] /= 16;
+				buffer[i] /= LOWER_VOLUME;
 			}
 			bytes_written = write( sound_driver, buffer, bytes_read );
 		}
@@ -52,7 +57,7 @@ void initialize_sound_driver()
 	fclose(sound_file);
 }
 
-void play_sound()
+void play_music()
 {
-	
+	play_sound(music);
 }
