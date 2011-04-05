@@ -36,6 +36,12 @@ void play_sound(FILE *sound_file)
 {
 	unsigned char *buffer = malloc(BUFFER_SIZE * sizeof(char) + 1); // Allocate buffer
 	
+	if (buffer == NULL)
+	{
+		printf("Failed to allocate buffer, aborting sound");
+		return;
+	}
+	
 	int bytes_read = fread( buffer, 1, BUFFER_SIZE, sound_file );
 	int bytes_written;
 	
