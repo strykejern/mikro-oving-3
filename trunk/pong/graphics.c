@@ -3,13 +3,17 @@
 #include "pong.h"
 #include "graphics.h"
 
-const bool BallBitmap[6][6] = {
-	{0, 0, 1, 1, 0, 0},
-	{0, 1, 1, 1, 1, 0},
-	{1, 1, 1, 1, 1, 1},
-	{1, 1, 1, 1, 1, 1},
-	{0, 1, 1, 1, 1, 0},
-	{0, 0, 1, 1, 0, 0}
+const bool BallBitmap[10][10] = {
+	{0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
+	{0, 0, 0, 1, 1, 1, 1, 0, 0, 0},
+	{0, 0, 1, 1, 1, 1, 1, 1, 0, 0},
+	{0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	{0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+	{0, 0, 1, 1, 1, 1, 1, 1, 0, 0},
+	{0, 0, 0, 1, 1, 1, 1, 0, 0, 0},
+	{0, 0, 0, 0, 1, 1, 0, 0, 0, 0}
 };
 
 
@@ -65,17 +69,18 @@ void draw_ball( ball_t *whichBall )
 	int x = 0;
 	int y = 0;
 	//Clear old ball
-	for( x = 0; x < 6; x++ )
+	for( x = 0; x < 10; x++ )
 	{
-		for( y = 0; y < 6; y++ )
+		for( y = 0; y < 10; y++ )
 		{
-			if( BallBitmap[x][y] ) draw_one_pixel( whichBall->xPos+x-3, whichBall->yPos+y-3, COLOR_BLACK );
+			if( BallBitmap[x][y] ) draw_one_pixel( whichBall->oldXPos+x-3, whichBall->oldYPos+y-3, COLOR_BLACK );
 		}
 	}
+
 	//Draw new ball
-	for( x = 0; x < 6; x++ )
+	for( x = 0; x < 10; x++ )
 	{
-		for( y = 0; y < 6; y++ )
+		for( y = 0; y < 10; y++ )
 		{
 			if( BallBitmap[x][y] ) draw_one_pixel( whichBall->xPos+x-3, whichBall->yPos+y-3, COLOR_WHITE );
 		}
