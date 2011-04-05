@@ -297,7 +297,13 @@ void do_ball_collision( ball_t * whichBall )
 		if( ball_collides(whichBall, &ballList[i]) )
 		{
 			short x = whichBall->xSpeed;
-			short y = whichBall->xSpeed;
+			short y = whichBall->ySpeed;
+
+			//move back to safe position
+			whichBall->xPos -= whichBall->xSpeed;
+			whichBall->yPos -= whichBall->ySpeed;
+			ballList[i].xPos -= ballList[i].xSpeed;
+			ballList[i].yPos -= ballList[i].ySpeed;
 
 			//move energy to the other ball
 			whichBall->xSpeed = ballList[i].xSpeed;
