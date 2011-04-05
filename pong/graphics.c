@@ -101,30 +101,34 @@ void render_screen()
 void circle_fill(int centerX, int centerY, int radius, COLOR c)
 {
 	//Bresenhams circle algrotitm
-	int p = 3 - (2 * radius);
-	int x = 0;
-	int y = radius;
-	
-	for(x = 0; x <= y; x++)
+	int i;
+	for( i = 0; i < radius-1; i++ )
 	{
-		if (p < 0)
+		int p = 3 - (2 * radius-i);
+		int x = 0;
+		int y = radius-i;
+		
+		for(x = 0; x <= y; x++)
 		{
-			p=(p+(4*x)+6);
+			if (p < 0)
+			{
+				p=(p+(4*x)+6);
+			}
+			else
+			{
+				y=y-1;
+	
+				p=p+((4*(x-y)+10));
+			}
+	
+			draw_one_pixel(centerX + x, centerY + y, c);
+			draw_one_pixel(centerX + x, centerY - y, c);
+			draw_one_pixel(centerX - x, centerY + y, c);
+			draw_one_pixel(centerX - x, centerY - y, c);
+			draw_one_pixel(centerX + y, centerY + x, c);
+			draw_one_pixel(centerX + y, centerY - x, c);
+			draw_one_pixel(centerX - y, centerY + x, c);
+			draw_one_pixel(centerX - y, centerY - x, c);
 		}
-		else
-		{
-			y=y-1;
-
-			p=p+((4*(x-y)+10));
-		}
-
-		draw_one_pixel(centerX + x, centerY + y, c);
-		draw_one_pixel(centerX + x, centerY - y, c);
-		draw_one_pixel(centerX - x, centerY + y, c);
-		draw_one_pixel(centerX - x, centerY - y, c);
-		draw_one_pixel(centerX + y, centerY + x, c);
-		draw_one_pixel(centerX + y, centerY - x, c);
-		draw_one_pixel(centerX - y, centerY + x, c);
-		draw_one_pixel(centerX - y, centerY - x, c);
 	}
 }
