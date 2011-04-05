@@ -35,7 +35,7 @@ void initialize_sound_driver()
 
 void play_sound(FILE *sound_file)
 {
-	unsigned char *buffer = malloc(BUFFER_SIZE * sizeof(char) + 1); // Allocate buffer
+	char *buffer = malloc(BUFFER_SIZE * sizeof(char) + 1); // Allocate buffer
 	
 	if (buffer == NULL)
 	{
