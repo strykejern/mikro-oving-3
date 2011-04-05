@@ -244,34 +244,6 @@ void do_ball_collision( ball_t * whichBall )
 	whichBall->xPos += whichBall->xSpeed;
 	whichBall->yPos += whichBall->ySpeed;
 
-	//Collide with top and bottom
-	if( whichBall->yPos <= 0 )
-	{
-		whichBall->yPos = 0;
-		whichBall->ySpeed = -whichBall->ySpeed;
-	}
-	else if( whichBall->yPos+BALL_SIZE >= 240 )
-	{
-		whichBall->yPos = 240-BALL_SIZE;
-		whichBall->ySpeed = -whichBall->ySpeed;
-	}
-
-	//Collide with left and right
-	if( whichBall->xPos <= 0 )
-	{
-		//player 1 loses
-		player2.score++;
-		reset_ball(whichBall);
-		LED_update_score();
-	}
-	else if( whichBall->xPos+BALL_SIZE >= 320 )
-	{
-		//player 2 loses
-		player1.score++;
-		reset_ball(whichBall);
-		LED_update_score();
-	}
-
 	//Collide with paddles
 	if( paddle_collides(&player1, whichBall) )
 	{
@@ -299,12 +271,44 @@ void do_ball_collision( ball_t * whichBall )
 			short x = whichBall->xSpeed;
 			short y = whichBall->ySpeed;
 
+			//move back to safe position
+			whichBall->xPos -= whichBall->xPos-ballList[i].xPos;
+			whichBall->yPos -= whichBall->yPos-ballList[i].yPos;
+
 			//move energy to the other ball
 			whichBall->xSpeed = ballList[i].xSpeed;
 			whichBall->ySpeed = ballList[i].ySpeed;
 			ballList[i].xSpeed = x;
 			ballList[i].ySpeed = y;
 		}
+	}
+
+	//Collide with top and bottom
+	if( whichBall->yPos <= 0 )
+	{
+		whichBall->yPos = 0;
+		whichBall->ySpeed = -whichBall->ySpeed;
+	}
+	else if( whichBall->yPos+BALL_SIZE >= 240 )
+	{
+		whichBall->yPos = 240-BALL_SIZE;
+		whichBall->ySpeed = -whichBall->ySpeed;
+	}
+
+	//Collide with left and right
+	if( whichBall->xPos <= 0 )
+	{
+		//player 1 loses
+		player2.score++;
+		reset_ball(whichBall);
+		LED_update_score();
+	}
+	else if( whichBall->xPos+BALL_SIZE >= 320 )
+	{
+		//player 2 loses
+		player1.score++;
+		reset_ball(whichBall);
+		LED_update_score();
 	}
 }
 
