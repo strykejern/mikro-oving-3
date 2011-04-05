@@ -162,7 +162,7 @@ void render_screen()
 	int i;
 
 	//Draw player names
-	draw_number( 50, 50, 1, player1.c );
+//	draw_number( 50, 50, 1, player1.c );
 //	draw_number( get_screen_width()-10, 0, 2, player2.c );
 
 	//Draw both paddles
@@ -189,7 +189,7 @@ void draw_number(int x, int y, int num, COLOR c)
 	{
 		for(i = 0; i < 4; i++)
 		{
-			if(NumberBitmap[(num * 5) + j][i])
+			if( NumberBitmap[(num * 5) + j][i] )
 				draw_one_pixel(x + j, y + i, c);
 		}
 	}
