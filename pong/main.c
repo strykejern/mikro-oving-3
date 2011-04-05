@@ -10,6 +10,7 @@
 
 #include "driver_interface.h"
 #include "pong.h"
+#include "sound.h"
 
 //Private variables
 static char *lcd;
@@ -233,21 +234,7 @@ int main()
 	//Open the LDC driver file in read write mode
 	file = open("/dev/fb0", O_RDWR);
 
-	int sample_rate = 22050;
-	sound = open("/dev/dsp", O_RDWR);
-	ioctl(sound, SOUND_PCM_WRITE_RATE, &sample_rate);
-
-	FILE *sound_file;
-	sound_file = fopen("09-the-moon.wav", "r");
-
-	int bytes_written;
-	while( !BUTTONS() && !fseek(sound_file, 8, SEEK_CUR) )
-	{
-		int sound_data;
-		fread( &sound_data, 8, 1, sound_file);
-		bytes_written = write( sound, &sound_data, 8 );
-		//usleep( 1 );
-	}
+	initialize_sound_driver();
 
 	//memory map file to array (4 bytes * 320x240 pixles)
 	lcd = (char*) mmap(0, 320*240*4, PROT_WRITE | PROT_READ, MAP_SHARED, file, 0);

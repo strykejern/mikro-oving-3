@@ -2,9 +2,9 @@
 BINARY = pong.elf
 
 #Compiling phase
-compile: 	main.c driver_test.c driver_interface.c
+compile: 	main.c driver_test.c driver_interface.c sound.c
 		avr32-linux-gcc -Wall -g -c $^
-		avr32-linux-gcc -o $(BINARY) main.o driver_interface.o -lm
+		avr32-linux-gcc -o $(BINARY) main.o driver_interface.o sound.o -lm
 		avr32-linux-gcc -o driver_test.elf driver_test.o -lm
 
 #Cleanup object files and binaries
