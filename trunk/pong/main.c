@@ -126,7 +126,7 @@ void reset_ball( ball_t *whichBall )
 	short xSpeed, ySpeed;
 
 	//Remove old ball first
-	clear_ball( whichBall );
+	if( whichBall->xPos != 0 ) clear_ball( whichBall );
 
 	//Middle of the screen
 	whichBall->oldXPos = whichBall->xPos = 160;
