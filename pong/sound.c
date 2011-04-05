@@ -50,7 +50,7 @@ void play_sound(FILE *sound_file)
 	int bytes_written;
 	
 	printf("Starting sound loop");
-	while ( !feof(sound_file) && !BUTTONS() ) // While not at EOF
+	while ( !feof(sound_file) ) // While not at EOF
 	{
 		if ( bytes_read )
 		{
