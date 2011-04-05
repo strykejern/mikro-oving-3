@@ -27,13 +27,17 @@ void initialize_sound_driver()
 	unsigned char *buffer = malloc(BUFFER_SIZE * sizeof(char) + 1); // Allocate buffer
 	
 	int bytes_read = fread( buffer, 1, BUFFER_SIZE, sound_file );
-	
 	int bytes_written;
 	
 	while ( !feof(sound_file) && !BUTTONS() ) // While not at EOF
 	{
 		if ( bytes_read )
 		{
+			int i;
+			for (i = 0; i < bytes_read; i++)
+			{
+				buffer[i] /= 2;
+			}
 			bytes_written = write( sound_driver, buffer, bytes_read );
 		}
 		else
