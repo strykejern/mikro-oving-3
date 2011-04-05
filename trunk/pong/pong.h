@@ -23,6 +23,7 @@ typedef struct paddle_s
 
 typedef struct ball_s
 {
+	bool  enabled;
 	short oldXPos;
 	short oldYPos;
 	short xPos;
