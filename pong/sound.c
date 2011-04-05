@@ -36,7 +36,7 @@ void initialize_sound_driver()
 			int i;
 			for (i = 0; i < bytes_read; i++)
 			{
-				buffer[i] /= 2;
+				buffer[i] /= 8;
 			}
 			bytes_written = write( sound_driver, buffer, bytes_read );
 		}
