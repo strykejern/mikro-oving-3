@@ -19,9 +19,9 @@ static int SAMPLE_RATE = 22050;
 
 static int BITRATE = 16;
 
-static FILE *music;
-
 static int sound_driver;
+
+static FILE *music;
 
 void initialize_sound_driver()
 {
@@ -76,6 +76,8 @@ void play_sound(FILE *sound_file)
 
 void play_music()
 {
+	if( !music ) return;
+
 	printf("Playing music\n");
 	play_sound(music);
 }
