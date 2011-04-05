@@ -69,38 +69,24 @@ void draw_ball( ball_t *whichBall )
 	int x = 0;
 	int y = 0;
 	//Clear old ball
-	for( x = 0; x < 10; x++ )
+	for( x = 0; x < BALL_SIZE; x++ )
 	{
-		for( y = 0; y < 10; y++ )
+		for( y = 0; y < BALL_SIZE; y++ )
 		{
-			if( BallBitmap[x][y] ) draw_one_pixel( whichBall->oldXPos+x-3, whichBall->oldYPos+y-3, COLOR_BLACK );
+			if( BallBitmap[x][y] ) 
+				draw_one_pixel( whichBall->oldXPos+x-BALL_SIZE/2, whichBall->oldYPos+y-BALL_SIZE/2, COLOR_BLACK );
 		}
 	}
 
 	//Draw new ball
-	for( x = 0; x < 10; x++ )
+	for( x = 0; x < BALL_SIZE; x++ )
 	{
-		for( y = 0; y < 10; y++ )
+		for( y = 0; y < BALL_SIZE; y++ )
 		{
-			if( BallBitmap[x][y] ) draw_one_pixel( whichBall->xPos+x-3, whichBall->yPos+y-3, COLOR_WHITE );
+			if( BallBitmap[x][y] ) 
+				draw_one_pixel( whichBall->xPos+x-BALL_SIZE/2, whichBall->yPos+y-BALL_SIZE/2, COLOR_WHITE );
 		}
 	}
-
-/*
-	int i, j;
-
-	//Clear old ball
-	clear_ball( whichBall );
-
-	//Draw new ball
-	for( i = whichBall->xPos; i < whichBall->xPos+BALL_SIZE; i++ ) 
-	{
-		for( j = whichBall->yPos; j < whichBall->yPos+BALL_SIZE; j++ )
-		{
-			draw_one_pixel( i, j, COLOR_WHITE );
-		}
-	}
-*/
 
 	whichBall->oldXPos = whichBall->xPos;
 	whichBall->oldYPos = whichBall->yPos;
