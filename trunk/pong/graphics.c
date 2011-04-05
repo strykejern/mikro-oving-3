@@ -101,13 +101,23 @@ void render_screen()
 void circle_fill(int centerX, int centerY, int radius, COLOR c)
 {
 	//Bresenhams circle algrotitm
-	int d = 3 - (2 * radius);
+	int p = 3 - (2 * radius);
 	int x = 0;
 	int y = radius;
-		
-	for( x = 0; x < y; y++ )
+	
+	for(x = 0; x <= y; x++)
 	{
-		//Draw the 8 circle pixels
+		if (p < 0)
+		{
+			p=(p+(4*x)+6);
+		}
+		else
+		{
+			y=y-1;
+
+			p=p+((4*(x-y)+10));
+		}
+
 		draw_one_pixel(centerX + x, centerY + y, c);
 		draw_one_pixel(centerX + x, centerY - y, c);
 		draw_one_pixel(centerX - x, centerY + y, c);
@@ -116,16 +126,5 @@ void circle_fill(int centerX, int centerY, int radius, COLOR c)
 		draw_one_pixel(centerX + y, centerY - x, c);
 		draw_one_pixel(centerX - y, centerY + x, c);
 		draw_one_pixel(centerX - y, centerY - x, c);
-		
-		//Now for each pixel we do the following operations
-		if (d < 0)
-		{
-			d = d + (4 * x) + 6;
-		}
-		else
-		{
-			d = d + 4 * (x - y) + 10;
-			y = y - 1;
-		}
 	}
 }
