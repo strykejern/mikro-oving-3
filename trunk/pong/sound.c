@@ -22,11 +22,14 @@ static int sound_driver;
 
 void initialize_sound_driver()
 {
+	printf("Initializing the sound driver\n");
 	sound_driver = open("/dev/dsp", O_WRONLY);
 
 	music = fopen("09-the-moon.au", "r");
 	
+	printf("ioctl... ");
 	ioctl( sound_driver, SOUND_PCM_WRITE_RATE, &SAMPLE_RATE );
+	printf("done\n");
 }
 
 void play_sound(FILE *sound_file)
@@ -36,6 +39,7 @@ void play_sound(FILE *sound_file)
 	int bytes_read = fread( buffer, 1, BUFFER_SIZE, sound_file );
 	int bytes_written;
 	
+	printf("Starting sound loop");
 	while ( !feof(sound_file) && !BUTTONS() ) // While not at EOF
 	{
 		printf(".");
@@ -62,5 +66,6 @@ void play_sound(FILE *sound_file)
 
 void play_music()
 {
+	printf("Playing music\n");
 	play_sound(music);
 }
