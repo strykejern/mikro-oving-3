@@ -8,10 +8,12 @@
 #include "driver_interface.h"
 #include "sound.h"
 
+#define MAX_BALLS 10
+
 //Private variables
 static paddle_t player1;
 static paddle_t player2;
-static ball_t theBall, theBall2;
+static ball_t ballList[MAX_BALLS];
 static bool game_active = true;
 
 //Private functions
@@ -49,9 +51,11 @@ int main()
 	//Reset score display
 	LED_update_score();
 
-	//Initialize the ball
-	reset_ball( &theBall );
-	reset_ball( &theBall2 );
+	//Initialize the balls
+	reset_ball( &ballList[0] );
+	reset_ball( &ballList[1] );
+	ballList[0].enabled = true;
+	ballList[1].enabled = true;
 
 	//Main game loop
 	while( game_active )
@@ -150,6 +154,16 @@ bool paddle_collides( paddle_t *whichPaddle, ball_t *whichBall )
 	return false;
 }
 
+//Returns true if the specified ball collides with the specified ball
+bool ball_collides( ball_t *firstBall, ball_t *secondBall )
+{
+	if( firstBall->xPos+BALL_SIZE >= secondBall->xPos 
+	 && firstBall->yPos+BALL_SIZE >= secondBall->yPos
+	 && firstBall->xPos <= secondBall->xPos + BALL_SIZE 
+	 && firstBall->yPos <= secondBall->yPos + BALL_SIZE ) return true;
+	return false;
+}
+
 //Resets the ball to it's starting position
 void reset_ball( ball_t *whichBall )
 {
@@ -221,6 +235,8 @@ void LED_update_score()
 
 void do_ball_collision( ball_t * whichBall )
 {
+	int i = 0;
+
 	//Move the ball
 	whichBall->xPos += whichBall->xSpeed;
 	whichBall->yPos += whichBall->ySpeed;
@@ -264,22 +280,55 @@ void do_ball_collision( ball_t * whichBall )
 		whichBall->xSpeed = -whichBall->xSpeed - 1;
 		whichBall->xPos += whichBall->xSpeed;
 	}
+
+	//Collide with all other balls!
+	for( i = 0; i < MAX_BALLS; i++ )
+	{
+		//Was this the last ball?
+		if( !ballList[i].enabled ) break;
+
+		//Dont collide with ourselves!
+		if( &ballList[i] == whichBall ) continue;
+
+		//Handle collisions
+		if( ball_collides(whichBall, &ballList[i]) )
+		{
+			whichBall->xSpeed = -whichBall->xSpeed;
+			whichBall->ySpeed = -whichBall->ySpeed;
+			ballList[i].xSpeed = -ballList[i].xSpeed;
+			ballList[i].ySpeed = -ballList[i].ySpeed;
+		}
+	}
 }
 
 //Do collisions between ball, wall and paddles
 void update_physics()
 {
-	do_ball_collision( &theBall );
-	do_ball_collision( &theBall2 );
+	int i;
+
+	//All active balls
+	for( i = 0; i < MAX_BALLS; i++ )
+	{
+		if( !ballList[i].enabled ) break;
+		do_ball_collision( &ballList[i] );
+	}	
 }
 
 //Draw all the game components
 void render_screen()
 {
+	int i;
+
+	//Draw both paddles
 	draw_paddle( &player1 );
-	draw_paddle( &player2 );	
-	draw_ball(&theBall);
-	draw_ball(&theBall2);
+	draw_paddle( &player2 );
+
+	//Draw all active balls
+	for( i = 0; i < MAX_BALLS; i++ )
+	{
+		if( !ballList[i].enabled ) break;
+		draw_ball( &ballList[i] );
+	}
 
 	//Show the result on the LCD
 	flip_buffers();
