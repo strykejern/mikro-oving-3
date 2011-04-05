@@ -163,7 +163,7 @@ void render_screen()
 
 	//Draw player names
 	draw_number( 0, 0, 1, player1.c );
-	draw_number( 0, get_screen_width()-10, 2, player2.c );
+	draw_number( get_screen_width()-10, 0, 2, player2.c );
 
 	//Draw both paddles
 	draw_paddle( &player1 );
