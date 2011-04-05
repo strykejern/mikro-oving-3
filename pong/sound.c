@@ -17,6 +17,8 @@ static const int LOWER_VOLUME = 1;
 
 static int SAMPLE_RATE = 44100;
 
+static int BITRATE = 16;
+
 static FILE *music;
 
 static int sound_driver;
@@ -30,12 +32,13 @@ void initialize_sound_driver()
 	
 	printf("ioctl... ");
 	ioctl( sound_driver, SOUND_PCM_WRITE_RATE, &SAMPLE_RATE );
+	ioctl( sound_driver, SOUND_PCM_WRITE_BITS, &BITRATE );
 	printf("done\n");
 }
 
 void play_sound(FILE *sound_file)
 {
-	char *buffer = malloc(BUFFER_SIZE * sizeof(char) + 1); // Allocate buffer
+	short *buffer = malloc(BUFFER_SIZE * sizeof(short) + 1); // Allocate buffer
 	
 	if (buffer == NULL)
 	{
