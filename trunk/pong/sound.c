@@ -6,6 +6,7 @@
 #include <time.h>			//For random seed
 
 #include <linux/soundcard.h>
+#include <sys/ioctl.h>
 
 #include "driver_interface.h"
 #include "sound.h"
@@ -64,6 +65,7 @@ void play_sound(FILE *sound_file)
 		}
 		
 		bytes_read = fread( buffer, 1, BUFFER_SIZE, sound_file );
+		usleep(100);
 	}
 	
 	free(buffer);
