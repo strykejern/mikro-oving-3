@@ -5,7 +5,7 @@
 #include "screen.h"			//Color typedef
 
 //Define constants 
-#define PADDLE_WIDTH 15
+#define PADDLE_WIDTH 8
 #define PADDLE_HEIGHT 50
 
 #define MAX_BALLS 10
