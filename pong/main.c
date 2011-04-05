@@ -1,33 +1,78 @@
-#include <sys/mman.h>			//For memory mapping
-#include <fcntl.h>			//for open()
 #include <stdlib.h>
 #include <stdio.h>			//for printf()
-#include <string.h>			//for memcpy()
 #include <unistd.h>			//For sleep
 #include <time.h>			//For random seed
 
-#include <linux/soundcard.h>
-
-#include "driver_interface.h"
+#include "graphics.h"
 #include "pong.h"
+#include "driver_interface.h"
 #include "sound.h"
 
 //Private variables
-static char *lcd;
 static paddle_t player1;
 static paddle_t player2;
 static ball_t theBall;
 static bool game_active = true;
 
-void draw_one_pixel(short x, short y, COLOR color )
-{
-	int index = (x * 4) + (y * 1280);
-	lcd[index + 0] = color.a;		//A
-	lcd[index + 1] = color.b;		//B
-	lcd[index + 2] = color.g;		//G
-	lcd[index + 3] = color.r;		//R
-}
+//Private functions
+void render_screen();
+void draw_paddle( paddle_t *whichPaddle );
+void draw_ball();
+void clear_ball( ball_t *whichBall );
 
+bool paddle_collides( paddle_t *whichPaddle, ball_t *whichBall );
+void reset_ball( ball_t *whichBall );
+void read_input();
+void initialize_players();
+void update_physics();
+void LED_update_score();
+
+//Program entry
+int main()
+{	
+	//Initialize the drivers
+	initialize_driver();
+
+	//Initialize random number generator
+	srand( time(NULL) );
+
+	//Initialize video
+	initialize_video(320, 240, 32);
+
+	//Initialize the sound driver
+	initialize_sound_driver();
+	play_music();
+
+	//Initialize the players
+	initialize_players();
+
+	//Reset score display
+	LED_update_score();
+
+	//Initialize the ball
+	reset_ball( &theBall );
+
+	//Main game loop
+	while( game_active )
+	{
+		//Read input
+		read_input();
+
+		//Make stuff move and collide
+		update_physics();
+
+		//Draw this frame
+		render_screen();
+
+		//Take it easy, relax a bit
+		usleep(SLEEP_PER_FRAME);	//30 frames per second
+	}
+
+	//Clear screen on exit
+	clear_screen();
+
+	return EXIT_SUCCESS;
+}
 
 void draw_paddle( paddle_t *whichPaddle )
 {
@@ -58,6 +103,7 @@ void draw_paddle( paddle_t *whichPaddle )
 	}
 }
 
+//This clears the pong ball
 void clear_ball( ball_t *whichBall )
 {
 	int i, j;
@@ -71,6 +117,7 @@ void clear_ball( ball_t *whichBall )
 	}
 }
 
+//Draws a single pong ball
 void draw_ball()
 {
 	int i, j;
@@ -91,6 +138,7 @@ void draw_ball()
 	theBall.oldYPos = theBall.yPos;
 }
 
+//Returns true if the specified paddle collides with the specified ball
 bool paddle_collides( paddle_t *whichPaddle, ball_t *whichBall )
 {
 	if( whichBall->xPos+BALL_SIZE >= whichPaddle->xPos 
@@ -100,7 +148,8 @@ bool paddle_collides( paddle_t *whichPaddle, ball_t *whichBall )
 	return false;
 }
 
-void reset_ball()
+//Resets the ball to it's starting position
+void reset_ball( ball_t *whichBall )
 {
 	short xSpeed, ySpeed;
 
@@ -108,18 +157,19 @@ void reset_ball()
 	clear_ball( &theBall );
 
 	//Middle of the screen
-	theBall.oldXPos = theBall.xPos = 160;
-	theBall.oldYPos = theBall.yPos = 120;
+	whichBall->oldXPos = whichBall->xPos = 160;
+	whichBall->oldYPos = whichBall->yPos = 120;
 
 	//Randomize ball velocity
 	xSpeed = 1 + rand() % 3;
 	ySpeed = 1 + rand() % 3;
 	if( rand() & 1 ) xSpeed = -xSpeed;
 	if( rand() & 1 ) ySpeed = -ySpeed;
-	theBall.xSpeed = xSpeed;
-	theBall.ySpeed = ySpeed;
+	whichBall->xSpeed = xSpeed;
+	whichBall->ySpeed = ySpeed;
 }
 
+//Read and handle any input from the buttons
 void read_input()
 {
 	int input = BUTTONS();
@@ -152,6 +202,7 @@ void read_input()
 	}
 }
 
+//Change the LED lights according to player scores
 void LED_update_score()
 {
 	unsigned char leds = 0;
@@ -166,6 +217,7 @@ void LED_update_score()
 	LEDS(leds);
 }
 
+//Do collisions between ball, wall and paddles
 void update_physics()
 {
 	//Move the ball
@@ -189,14 +241,14 @@ void update_physics()
 	{
 		//player 1 loses
 		player2.score++;
-		reset_ball();
-		LED_update_score();
+		reset_ball(&theBall);
+		LED_update_score(&theBall);
 	}
 	else if( theBall.xPos+BALL_SIZE >= 320 )
 	{
 		//player 2 loses
 		player1.score++;
-		reset_ball();
+		reset_ball(&theBall);
 		LED_update_score();
 	}
 
@@ -213,76 +265,30 @@ void update_physics()
 	}
 }
 
+//Draw all the game components
 void render_screen()
 {
 	draw_paddle( &player1 );
 	draw_paddle( &player2 );	
 	draw_ball();
+
+	//Show the result on the LCD
+	flip_buffers();
 }
 
-//Program entry
-int main()
-{	
-	int file, sound;
-
-	//Initialize the drivers
-	initialize_driver();
-
-	//Initialize random number generator
-	srand( time(NULL) );
-
-	//Open the LDC driver file in read write mode
-	file = open("/dev/fb0", O_RDWR);
-
-	initialize_sound_driver();
-	play_music();
-
-	//memory map file to array (4 bytes * 320x240 pixles)
-	lcd = (char*) mmap(0, 320*240*4, PROT_WRITE | PROT_READ, MAP_SHARED, file, 0);
-
-	//Clear screen
-	memset( lcd, 0, 320*240*4 );
-
-	//Initialize the players
+void initialize_players()
+{
 	player1.xPos = 0;
 	player1.yPos = 120-(PADDLE_HEIGHT/2);
 	player1.c.r = 255;
 	player1.c.g = 0;
 	player1.c.b = 0;
 	player1.score = 0;
-
+	
 	player2.xPos = 320-PADDLE_WIDTH;
 	player2.yPos = 120-(PADDLE_HEIGHT/2);
 	player2.c.r = 255;
 	player2.c.g = 255;
 	player2.c.b = 0;
 	player2.score = 0;
-
-	//Reset score display
-	LED_update_score();
-
-	//Initialize the ball
-	reset_ball();
-
-	//Main game loop
-	while( game_active )
-	{
-		//Read input
-		read_input();
-
-		//Make stuff move and collide
-		update_physics();
-
-		//Draw this frame
-		render_screen();
-
-		//Take it easy, relax a bit
-		usleep(SLEEP_PER_FRAME);	//30 frames per second
-	}
-
-	//Clear screen on exit
-	memset( lcd, 0, 320*240*4 );
-
-	return EXIT_SUCCESS;
 }
-
