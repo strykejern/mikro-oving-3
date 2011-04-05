@@ -17,7 +17,7 @@ bool paddle_collides( paddle_t *whichPaddle, ball_t *whichBall )
 bool ball_collides( ball_t *firstBall, ball_t *secondBall )
 {
 	if( firstBall->xPos+BALL_SIZE/2 >= secondBall->xPos - BALL_SIZE/2
-	 && firstBall->yPos+BALL_SIZE/2 >= secondBall->yPos -BALL_SIZE/2
+	 && firstBall->yPos+BALL_SIZE/2 >= secondBall->yPos - BALL_SIZE/2
 	 && firstBall->xPos-BALL_SIZE/2 <= secondBall->xPos + BALL_SIZE/2 
 	 && firstBall->yPos-BALL_SIZE/2 <= secondBall->yPos + BALL_SIZE/2 ) return true;
 	return false;
@@ -79,7 +79,7 @@ void do_ball_collision( ball_t * whichBall )
 	//Collide with top and bottom
 	if( whichBall->yPos-BALL_SIZE/2 <= 0 )
 	{
-		whichBall->yPos = 0;
+		whichBall->yPos = BALL_SIZE/2;
 		whichBall->ySpeed = -whichBall->ySpeed;
 	}
 	else if( whichBall->yPos+BALL_SIZE/2 >= get_screen_height() )
