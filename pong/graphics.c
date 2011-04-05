@@ -156,14 +156,30 @@ void draw_ball( ball_t *whichBall )
 	whichBall->oldYPos = whichBall->yPos;
 }
 
+void draw_player(int x, int y, COLOR c)
+{
+  int i;
+  int j;
+  for(j = 0; j < 5; j++)
+  {
+    for(i = 0; i < 27; i++)
+    {
+      if(PlayerBitmap[j][i])
+        draw_one_pixel(x + i, y + j, c);
+    }
+  }
+}
+
 //Draw all the game components
 void render_screen()
 {
 	int i;
 
 	//Draw player names
-	draw_number( 0, 0, 1, player1.c );
-	draw_number( get_screen_width()-10, 0, 2, player2.c );
+	draw_player( 10, 10, player1.c );
+	draw_number( 40, 10, 1, player1.c );
+	draw_player( get_screen_width()-60, 10, player2.c );
+	draw_number( get_screen_width()-50, 10, 2, player2.c );
 
 	//Draw both paddles
 	draw_paddle( &player1 );
