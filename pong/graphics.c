@@ -3,7 +3,17 @@
 #include "pong.h"
 #include "graphics.h"
 
-void circle_fill(int centerX,int centerY, int radius, COLOR c);
+const bool BallBitmap[6][6] = {
+	{0, 0, 1, 1, 0, 0},
+	{0, 1, 1, 1, 1, 0},
+	{1, 1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1, 1},
+	{0, 1, 1, 1, 1, 0},
+	{0, 0, 1, 1, 0, 0}
+};
+
+
+
 
 //Draw one paddle
 void draw_paddle( paddle_t *whichPaddle )
@@ -52,11 +62,24 @@ void clear_ball( ball_t *whichBall )
 //Draws a single pong ball
 void draw_ball( ball_t *whichBall )
 {
+	int x = 0;
+	int y = 0;
 	//Clear old ball
-	circle_fill(whichBall->xPos, whichBall->yPos, BALL_SIZE, COLOR_BLACK);
-
+	for( x = 0; x < 6; x++ )
+	{
+		for( y = 0; y < 6; y++ )
+		{
+			if( BallBitmap[x][y] ) draw_one_pixel( whichBall->xPos+x-3, whichBall->yPos+y-3, COLOR_BLACK );
+		}
+	}
 	//Draw new ball
-	circle_fill(whichBall->xPos, whichBall->yPos, BALL_SIZE, COLOR_WHITE);
+	for( x = 0; x < 6; x++ )
+	{
+		for( y = 0; y < 6; y++ )
+		{
+			if( BallBitmap[x][y] ) draw_one_pixel( whichBall->xPos+x-3, whichBall->yPos+y-3, COLOR_WHITE );
+		}
+	}
 
 /*
 	int i, j;
@@ -98,37 +121,3 @@ void render_screen()
 	flip_buffers();
 }
 
-void circle_fill(int centerX, int centerY, int radius, COLOR c)
-{
-	//Bresenhams circle algrotitm
-	int i;
-	for( i = 0; i < radius-1; i++ )
-	{
-		int p = 3 - (2 * radius-i);
-		int x = 0;
-		int y = radius-i;
-		
-		for(x = 0; x <= y; x++)
-		{
-			if (p < 0)
-			{
-				p=(p+(4*x)+6);
-			}
-			else
-			{
-				y=y-1;
-	
-				p=p+((4*(x-y)+10));
-			}
-	
-			draw_one_pixel(centerX + x, centerY + y, c);
-			draw_one_pixel(centerX + x, centerY - y, c);
-			draw_one_pixel(centerX - x, centerY + y, c);
-			draw_one_pixel(centerX - x, centerY - y, c);
-			draw_one_pixel(centerX + y, centerY + x, c);
-			draw_one_pixel(centerX + y, centerY - x, c);
-			draw_one_pixel(centerX - y, centerY + x, c);
-			draw_one_pixel(centerX - y, centerY - x, c);
-		}
-	}
-}
