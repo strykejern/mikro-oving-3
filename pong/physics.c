@@ -6,20 +6,20 @@
 //Returns true if the specified paddle collides with the specified ball
 bool paddle_collides( paddle_t *whichPaddle, ball_t *whichBall )
 {
-	if( whichBall->xPos+BALL_SIZE >= whichPaddle->xPos 
-	 && whichBall->yPos+BALL_SIZE >= whichPaddle->yPos
-	 && whichBall->xPos <= whichPaddle->xPos + PADDLE_WIDTH 
-	 && whichBall->yPos <= whichPaddle->yPos + PADDLE_HEIGHT ) return true;
+	if( whichBall->xPos+BALL_SIZE/2 >= whichPaddle->xPos
+	 && whichBall->yPos+BALL_SIZE/2 >= whichPaddle->yPos
+	 && whichBall->xPos-BALL_SIZE/2 <= whichPaddle->xPos + PADDLE_WIDTH 
+	 && whichBall->yPos-BALL_SIZE/2 <= whichPaddle->yPos + PADDLE_HEIGHT ) return true;
 	return false;
 }
 
 //Returns true if the specified ball collides with the specified ball
 bool ball_collides( ball_t *firstBall, ball_t *secondBall )
 {
-	if( firstBall->xPos+BALL_SIZE >= secondBall->xPos 
-	 && firstBall->yPos+BALL_SIZE >= secondBall->yPos
-	 && firstBall->xPos <= secondBall->xPos + BALL_SIZE 
-	 && firstBall->yPos <= secondBall->yPos + BALL_SIZE ) return true;
+	if( firstBall->xPos+BALL_SIZE/2 >= secondBall->xPos - BALL_SIZE/2
+	 && firstBall->yPos+BALL_SIZE/2 >= secondBall->yPos -BALL_SIZE/2
+	 && firstBall->xPos-BALL_SIZE/2 <= secondBall->xPos + BALL_SIZE/2 
+	 && firstBall->yPos-BALL_SIZE/2 <= secondBall->yPos + BALL_SIZE/2 ) return true;
 	return false;
 }
 
@@ -77,26 +77,26 @@ void do_ball_collision( ball_t * whichBall )
 	}
 
 	//Collide with top and bottom
-	if( whichBall->yPos <= 0 )
+	if( whichBall->yPos-BALL_SIZE/2 <= 0 )
 	{
 		whichBall->yPos = 0;
 		whichBall->ySpeed = -whichBall->ySpeed;
 	}
-	else if( whichBall->yPos+BALL_SIZE >= 240 )
+	else if( whichBall->yPos+BALL_SIZE/2 >= get_screen_height() )
 	{
-		whichBall->yPos = 240-BALL_SIZE;
+		whichBall->yPos = get_screen_height()-BALL_SIZE/2;
 		whichBall->ySpeed = -whichBall->ySpeed;
 	}
 
 	//Collide with left and right
-	if( whichBall->xPos <= 0 )
+	if( whichBall->xPos-BALL_SIZE/2 <= 0 )
 	{
 		//player 1 loses
 		player2.score++;
 		reset_ball(whichBall);
 		LED_update_score();
 	}
-	else if( whichBall->xPos+BALL_SIZE >= 320 )
+	else if( whichBall->xPos+BALL_SIZE/2 >= get_screen_width() )
 	{
 		//player 2 loses
 		player1.score++;
