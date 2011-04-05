@@ -2,6 +2,7 @@
 #include <stdio.h>			//for printf()
 #include <unistd.h>			//For sleep
 #include <time.h>			//For random seed
+#include <pthread.h>
 
 #include "screen.h"
 #include "pong.h"
@@ -12,6 +13,15 @@
 
 //Private variables
 static bool game_active = true;
+
+void *threaded_music(void *arg)
+{
+	play_music();
+	return NULL;
+}
+
+pthread_t music;
+
 
 //Public variables
 paddle_t player1;
@@ -37,7 +47,7 @@ int main()
 
 	//Initialize the sound driver
 	initialize_sound_driver();
-	play_music();
+	pthread_create( &music, NULL, threaded_music, (void*)0 );
 
 	//Initialize the players
 	reset_players();
