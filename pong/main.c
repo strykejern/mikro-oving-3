@@ -241,7 +241,7 @@ int main()
 	sound_file = open("09-the-moon.wav", O_RDWR);
 
 	int bytes_written;
-	while( !BUTTONS() )
+	while( !BUTTONS() && sound_file != -1 )
 	{
 		int sound_data;
 		read( sound_file, &sound_data, sizeof(sound_data) );
