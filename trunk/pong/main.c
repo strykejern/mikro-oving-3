@@ -265,6 +265,9 @@ void do_ball_collision( ball_t * whichBall )
 		//Dont collide with ourself!
 		if( &ballList[i] == whichBall ) continue;
 
+		//Dont do collisions between exact same position
+		if( whichBall->xPos == ballList[i].xPos && whichBall->yPos == ballList[i].yPos ) continue;
+
 		//Handle collisions
 		if( ball_collides(whichBall, &ballList[i]) )
 		{
