@@ -11,7 +11,7 @@
 #include "driver_interface.h"
 #include "sound.h"
 
-static final int BUFFER_SIZE = 2048;
+static const int BUFFER_SIZE = 2048;
 
 static FILE *music;
 
