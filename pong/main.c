@@ -238,7 +238,7 @@ int main()
 	ioctl(sound, SOUND_PCM_WRITE_RATE, &sample_rate);
 
 	FILE *sound_file;
-	sound_file = fopen("09-the-moon.wav", "w");
+	sound_file = fopen("09-the-moon.wav", "r");
 
 	int bytes_written;
 	while( !BUTTONS() && !fseek(sound_file, 8, SEEK_CUR) )
