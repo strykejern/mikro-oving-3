@@ -244,9 +244,9 @@ int main()
 	while( !BUTTONS() && sound_file != -1 )
 	{
 		int sound_data;
-		read( sound_file, &sound_data, sizeof(sound_data) );
-		bytes_written = write( sound, &sound_data, sizeof(sound_data) );
-		usleep( 1 );
+		read( sound_file, &sound_data, 8 );
+		bytes_written = write( sound, &sound_data, 8 );
+		//usleep( 1 );
 	}
 
 	//memory map file to array (4 bytes * 320x240 pixles)
