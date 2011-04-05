@@ -3,7 +3,7 @@
 #include "pong.h"
 #include "graphics.h"
 
-const bool BallBitmap[10][10] = {
+static const bool ballBitmap[10][10] = {
 	{0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
 	{0, 0, 1, 1, 1, 1, 1, 1, 0, 0},
 	{0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
@@ -16,15 +16,15 @@ const bool BallBitmap[10][10] = {
 	{0, 0, 0, 0, 1, 1, 0, 0, 0, 0}
 };
 
-const bool PlayerBitmap[5][27] = {
-	{1,1,1,0,0,1,0,0,0,0,1,1,0,0,1,0,1,0,1,1,1,1,0,1,1,1,0,},
-	{1,0,0,1,0,1,0,0,0,1,0,0,1,0,1,0,1,0,1,0,0,0,0,1,0,0,1,},
-	{1,1,1,0,0,1,0,0,0,1,1,1,1,0,0,1,0,0,1,1,1,0,0,1,1,1,0,},
-	{1,0,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,1,0,},
-	{1,0,0,0,0,1,1,1,0,1,0,0,1,0,0,1,0,0,1,1,1,1,0,1,0,0,1,}
+static const bool playerBitmap[5][27] = {
+	{1,1,1,0, 0, 1,0,0, 0, 0,1,1,0, 0, 1,0,1, 0, 1,1,1,1, 0, 1,1,1,0,},
+	{1,0,0,1, 0, 1,0,0, 0, 1,0,0,1, 0, 1,0,1, 0, 1,0,0,0, 0, 1,0,0,1,},
+	{1,1,1,0, 0, 1,0,0, 0, 1,1,1,1, 0, 0,1,0, 0, 1,1,1,0, 0, 1,1,1,0,},
+	{1,0,0,0, 0, 1,0,0, 0, 1,0,0,1, 0, 0,1,0, 0, 1,0,0,0, 0, 1,0,1,0,},
+	{1,0,0,0, 0, 1,1,1, 0, 1,0,0,1, 0, 0,1,0, 0, 1,1,1,1, 0, 1,0,0,1,}
 };
 
-const bool NumberBitmap[40][5] = {
+static const bool numberBitmap[40][5] = {
   {0, 1, 1 ,1, 0},
   {1, 0, 0, 0, 1},
   {1, 0, 0, 0, 1},
@@ -52,7 +52,11 @@ const bool NumberBitmap[40][5] = {
 };
 
 
+void draw_paddle( struct paddle_s *whichPaddle );
+void draw_ball( struct ball_s *whichBall );
+void clear_ball( struct ball_s *whichBall );
 void draw_number(int x, int y, int num, COLOR c);
+void draw_player_text(int x, int y, COLOR c);
 
 //Draw one paddle
 void draw_paddle( paddle_t *whichPaddle )
@@ -93,7 +97,7 @@ void clear_ball( ball_t *whichBall )
 	{
 		for( y = 0; y < BALL_SIZE; y++ )
 		{
-			if( BallBitmap[x][y] ) 
+			if( ballBitmap[x][y] ) 
 				draw_one_pixel( whichBall->oldXPos+x-BALL_SIZE/2, whichBall->oldYPos+y-BALL_SIZE/2, COLOR_BLACK );
 		}
 	}
@@ -112,7 +116,7 @@ void draw_ball( ball_t *whichBall )
 	{
 		for( y = 0; y < BALL_SIZE; y++ )
 		{
-			if( BallBitmap[x][y] ) 
+			if( ballBitmap[x][y] ) 
 				draw_one_pixel( whichBall->xPos+x-BALL_SIZE/2, whichBall->yPos+y-BALL_SIZE/2, COLOR_WHITE );
 		}
 	}
@@ -121,15 +125,15 @@ void draw_ball( ball_t *whichBall )
 	whichBall->oldYPos = whichBall->yPos;
 }
 
-void draw_player(int x, int y, COLOR c)
+void draw_player_text(int x, int y, COLOR c)
 {
 	int i;
 	int j;
-		for(j = 0; j < 5; j++)
+	for(j = 0; j < 5; j++)
+	{
+		for(i = 0; i < 27; i++)
 		{
-			for(i = 0; i < 27; i++)
-			{
-				if(PlayerBitmap[j][i]) draw_one_pixel(x + i, y + j, c);
+			if(playerBitmap[j][i]) draw_one_pixel(x + i, y + j, c);
 		}
 	}
 }
@@ -140,9 +144,9 @@ void render_screen()
 	int i;
 
 	//Draw player names
-	draw_player( 10, 10, player1.c );
+	draw_player_text( 10, 10, player1.c );
 	draw_number( 40, 10, 1, player1.c );
-	draw_player( get_screen_width()-60, 10, player2.c );
+	draw_player_text( get_screen_width()-60, 10, player2.c );
 	draw_number( get_screen_width()-30, 10, 2, player2.c );
 
 	//Draw both paddles
@@ -182,7 +186,7 @@ void draw_number(int x, int y, int num, COLOR c)
 	{
 		for(j = 0; j < 5; j++)
 		{
-			if( NumberBitmap[(num * 5) + i][j] )
+			if( numberBitmap[(num * 5) + i][j] )
 				draw_one_pixel(x + i, y + j, c);
 		}
 	}
