@@ -7,5 +7,6 @@ static const COLOR COLOR_WHITE = {255, 255, 255, 0};
 
 //Public functions
 void render_screen();
+void clear_ball( ball_t *whichBall );
 
 #endif

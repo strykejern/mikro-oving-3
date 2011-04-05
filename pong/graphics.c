@@ -51,39 +51,33 @@ static const bool numberBitmap[40][5] = {
 
 };
 
-
-void draw_paddle( struct paddle_s *whichPaddle );
-void draw_ball( struct ball_s *whichBall );
-void clear_ball( struct ball_s *whichBall );
-void draw_number(int x, int y, int num, COLOR c);
-void draw_player_text(int x, int y, COLOR c);
+//Private functions
+void draw_paddle( paddle_t *whichPaddle );
+void draw_ball( ball_t *whichBall );
+void draw_number(const int x, const int y, int num, const COLOR c);
+void draw_player_text(const int x, const int y, const COLOR c);
 
 //Draw one paddle
 void draw_paddle( paddle_t *whichPaddle )
 {
 	int i, j;
 
-	//Only draw if we have moved since last frame
-	//if( whichPaddle->oldY != whichPaddle->yPos )
+	//First clear old paddle
+	for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
 	{
-
-		//First clear old paddle
-		for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
+		for( j =whichPaddle->oldY; j < whichPaddle->oldY+PADDLE_HEIGHT; j++ )
 		{
-			for( j =whichPaddle->oldY; j < whichPaddle->oldY+PADDLE_HEIGHT; j++ )
-			{
-				draw_one_pixel( i, j, COLOR_BLACK );
-			}
+			draw_one_pixel( i, j, COLOR_BLACK );
 		}
-		whichPaddle->oldY = whichPaddle->yPos;
+	}
+	whichPaddle->oldY = whichPaddle->yPos;
 
-		//Then draw the new one
-		for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
+	//Then draw the new one
+	for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
+	{
+		for( j = whichPaddle->yPos; j < whichPaddle->yPos+PADDLE_HEIGHT; j++ )
 		{
-			for( j = whichPaddle->yPos; j < whichPaddle->yPos+PADDLE_HEIGHT; j++ )
-			{
-				draw_one_pixel( i, j, whichPaddle->c );
-			}
+			draw_one_pixel( i, j, whichPaddle->c );
 		}
 	}
 }
@@ -125,7 +119,7 @@ void draw_ball( ball_t *whichBall )
 	whichBall->oldYPos = whichBall->yPos;
 }
 
-void draw_player_text(int x, int y, COLOR c)
+void draw_player_text(const int x, const int y, const COLOR c)
 {
 	int i;
 	int j;
@@ -177,10 +171,13 @@ void render_screen()
 	flip_buffers();
 }
 
-void draw_number(int x, int y, int num, COLOR c)
+//Draw a number between 0 and 3
+void draw_number(const int x, const int y, int num, const COLOR c)
 {
 	int i;
 	int j;
+
+	if( num > 3 ) num = 3;
 	
 	for(i = 0; i < 5; i++)
 	{
