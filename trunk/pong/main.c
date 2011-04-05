@@ -1,33 +1,25 @@
-#include <stdlib.h>
+#include <stdlib.h>			//For various stuff
 #include <stdio.h>			//for printf()
 #include <unistd.h>			//For sleep
 #include <time.h>			//For random seed
 
-#include "graphics.h"
+#include "screen.h"
 #include "pong.h"
+#include "graphics.h"
 #include "driver_interface.h"
 #include "sound.h"
-
-#define MAX_BALLS 10
+#include "physics.h"
 
 //Private variables
-static paddle_t player1;
-static paddle_t player2;
-static ball_t ballList[MAX_BALLS];
 static bool game_active = true;
 
-//Private functions
-void render_screen();
-void draw_paddle( paddle_t *whichPaddle );
-void draw_ball( ball_t *whichBall );
-void clear_ball( ball_t *whichBall );
+//Public variables
+paddle_t player1;
+paddle_t player2;
+ball_t ballList[MAX_BALLS];
 
-bool paddle_collides( paddle_t *whichPaddle, ball_t *whichBall );
-void reset_ball( ball_t *whichBall );
-void read_input();
-void initialize_players();
-void update_physics();
-void LED_update_score();
+//Private functions
+static void read_input();
 
 //Program entry
 int main()
@@ -48,10 +40,7 @@ int main()
 	play_music();
 
 	//Initialize the players
-	initialize_players();
-
-	//Reset score display
-	LED_update_score();
+	reset_players();
 
 	//Initialize the balls
 	for( i = 0; i < 5; i++ )
@@ -82,111 +71,6 @@ int main()
 	return EXIT_SUCCESS;
 }
 
-//Draw one paddle
-void draw_paddle( paddle_t *whichPaddle )
-{
-	int i, j;
-
-	//Only draw if we have moved since last frame
-	if( whichPaddle->oldY != whichPaddle->yPos )
-	{
-
-		//First clear old paddle
-		for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
-		{
-			for( j =whichPaddle->oldY; j < whichPaddle->oldY+PADDLE_HEIGHT; j++ )
-			{
-				draw_one_pixel( i, j, COLOR_BLACK );
-			}
-		}
-		whichPaddle->oldY = whichPaddle->yPos;
-
-		//Then draw the new one
-		for( i = whichPaddle->xPos; i < whichPaddle->xPos+PADDLE_WIDTH; i++ ) 
-		{
-			for( j = whichPaddle->yPos; j < whichPaddle->yPos+PADDLE_HEIGHT; j++ )
-			{
-				draw_one_pixel( i, j, whichPaddle->c );
-			}
-		}
-	}
-}
-
-//This clears the pong ball
-void clear_ball( ball_t *whichBall )
-{
-	int i, j;
-
-	for( i = whichBall->oldXPos; i < whichBall->oldXPos+BALL_SIZE; i++ ) 
-	{
-		for( j = whichBall->oldYPos; j < whichBall->oldYPos+BALL_SIZE; j++ )
-		{
-			draw_one_pixel( i, j, COLOR_BLACK);
-		}
-	}
-}
-
-//Draws a single pong ball
-void draw_ball( ball_t *whichBall )
-{
-	int i, j;
-
-	//Clear old ball
-	clear_ball( whichBall );
-
-	//Draw new ball
-	for( i = whichBall->xPos; i < whichBall->xPos+BALL_SIZE; i++ ) 
-	{
-		for( j = whichBall->yPos; j < whichBall->yPos+BALL_SIZE; j++ )
-		{
-			draw_one_pixel( i, j, COLOR_WHITE );
-		}
-	}
-
-	whichBall->oldXPos = whichBall->xPos;
-	whichBall->oldYPos = whichBall->yPos;
-}
-
-//Returns true if the specified paddle collides with the specified ball
-bool paddle_collides( paddle_t *whichPaddle, ball_t *whichBall )
-{
-	if( whichBall->xPos+BALL_SIZE >= whichPaddle->xPos 
-	 && whichBall->yPos+BALL_SIZE >= whichPaddle->yPos
-	 && whichBall->xPos <= whichPaddle->xPos + PADDLE_WIDTH 
-	 && whichBall->yPos <= whichPaddle->yPos + PADDLE_HEIGHT ) return true;
-	return false;
-}
-
-//Returns true if the specified ball collides with the specified ball
-bool ball_collides( ball_t *firstBall, ball_t *secondBall )
-{
-	if( firstBall->xPos+BALL_SIZE >= secondBall->xPos 
-	 && firstBall->yPos+BALL_SIZE >= secondBall->yPos
-	 && firstBall->xPos <= secondBall->xPos + BALL_SIZE 
-	 && firstBall->yPos <= secondBall->yPos + BALL_SIZE ) return true;
-	return false;
-}
-
-//Resets the ball to it's starting position
-void reset_ball( ball_t *whichBall )
-{
-	short xSpeed, ySpeed;
-
-	//Remove old ball first
-	clear_ball( whichBall );
-
-	//Middle of the screen
-	whichBall->oldXPos = whichBall->xPos = 160;
-	whichBall->oldYPos = whichBall->yPos = 120;
-
-	//Randomize ball velocity
-	xSpeed = 1 + rand() % 3;
-	ySpeed = 1 + rand() % 3;
-	if( rand() & 1 ) xSpeed = -xSpeed;
-	if( rand() & 1 ) ySpeed = -ySpeed;
-	whichBall->xSpeed = xSpeed;
-	whichBall->ySpeed = ySpeed;
-}
 
 //Read and handle any input from the buttons
 void read_input()
@@ -236,124 +120,31 @@ void LED_update_score()
 	LEDS(leds);
 }
 
-void do_ball_collision( ball_t * whichBall )
+//Resets the ball to it's starting position
+void reset_ball( ball_t *whichBall )
 {
-	int i = 0;
+	short xSpeed, ySpeed;
 
-	//Move the ball
-	whichBall->xPos += whichBall->xSpeed;
-	whichBall->yPos += whichBall->ySpeed;
+	//Remove old ball first
+	clear_ball( whichBall );
 
-	//Collide with paddles
-	if( paddle_collides(&player1, whichBall) )
-	{
-		whichBall->xSpeed = -whichBall->xSpeed + 1;
-		whichBall->xPos += whichBall->xSpeed;
-	}
-	else if( paddle_collides(&player2, whichBall) )
-	{
-		whichBall->xSpeed = -whichBall->xSpeed - 1;
-		whichBall->xPos += whichBall->xSpeed;
-	}
+	//Middle of the screen
+	whichBall->oldXPos = whichBall->xPos = 160;
+	whichBall->oldYPos = whichBall->yPos = 120;
 
-	//Collide with all other balls!
-	for( i = 0; i < MAX_BALLS; i++ )
-	{
-		//Was this the last ball?
-		if( !ballList[i].enabled ) break;
-
-		//Dont collide with ourself!
-		if( &ballList[i] == whichBall ) continue;
-
-		//Dont do collisions between exact same position
-		if( whichBall->xPos == ballList[i].xPos && whichBall->yPos == ballList[i].yPos ) continue;
-
-		//Handle collisions
-		if( ball_collides(whichBall, &ballList[i]) )
-		{
-			//move back to safe position
-			short x = whichBall->xPos;
-			short y = whichBall->yPos;
-			whichBall->xPos += (whichBall->xPos-ballList[i].xPos)/2;
-			whichBall->yPos += (whichBall->yPos-ballList[i].yPos)/2;
-			ballList[i].xPos += (ballList[i].xPos-x)/2;
-			ballList[i].yPos += (ballList[i].yPos-y)/2;
-
-			//swap velocities!
-			x = whichBall->xSpeed;
-			y = whichBall->ySpeed;
-			whichBall->xSpeed = ballList[i].xSpeed;
-			whichBall->ySpeed = ballList[i].ySpeed;
-			ballList[i].xSpeed = x;
-			ballList[i].ySpeed = y;
-		}
-	}
-
-	//Collide with top and bottom
-	if( whichBall->yPos <= 0 )
-	{
-		whichBall->yPos = 0;
-		whichBall->ySpeed = -whichBall->ySpeed;
-	}
-	else if( whichBall->yPos+BALL_SIZE >= 240 )
-	{
-		whichBall->yPos = 240-BALL_SIZE;
-		whichBall->ySpeed = -whichBall->ySpeed;
-	}
-
-	//Collide with left and right
-	if( whichBall->xPos <= 0 )
-	{
-		//player 1 loses
-		player2.score++;
-		reset_ball(whichBall);
-		LED_update_score();
-	}
-	else if( whichBall->xPos+BALL_SIZE >= 320 )
-	{
-		//player 2 loses
-		player1.score++;
-		reset_ball(whichBall);
-		LED_update_score();
-	}
-}
-
-//Do collisions between ball, wall and paddles
-void update_physics()
-{
-	int i;
-
-	//All active balls
-	for( i = 0; i < MAX_BALLS; i++ )
-	{
-		if( !ballList[i].enabled ) break;
-		do_ball_collision( &ballList[i] );
-	}	
-}
-
-//Draw all the game components
-void render_screen()
-{
-	int i;
-
-	//Draw both paddles
-	draw_paddle( &player1 );
-	draw_paddle( &player2 );
-
-	//Draw all active balls
-	for( i = 0; i < MAX_BALLS; i++ )
-	{
-		if( !ballList[i].enabled ) break;
-		draw_ball( &ballList[i] );
-	}
-
-	//Show the result on the LCD
-	flip_buffers();
+	//Randomize ball velocity
+	xSpeed = 1 + rand() % 3;
+	ySpeed = 1 + rand() % 3;
+	if( rand() & 1 ) xSpeed = -xSpeed;
+	if( rand() & 1 ) ySpeed = -ySpeed;
+	whichBall->xSpeed = xSpeed;
+	whichBall->ySpeed = ySpeed;
 }
 
 //Reset players and their positions
-void initialize_players()
+void reset_players()
 {
+	//Player 1
 	player1.xPos = 0;
 	player1.yPos = 120-(PADDLE_HEIGHT/2);
 	player1.c.r = 255;
@@ -361,10 +152,15 @@ void initialize_players()
 	player1.c.b = 0;
 	player1.score = 0;
 	
+	//Player 2
 	player2.xPos = 320-PADDLE_WIDTH;
 	player2.yPos = 120-(PADDLE_HEIGHT/2);
 	player2.c.r = 255;
 	player2.c.g = 255;
 	player2.c.b = 0;
 	player2.score = 0;
+
+	//Reset score display
+	LED_update_score();
 }
+
