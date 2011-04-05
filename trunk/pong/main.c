@@ -32,6 +32,8 @@ void LED_update_score();
 //Program entry
 int main()
 {	
+	int i;
+
 	//Initialize the drivers
 	initialize_driver();
 
@@ -52,10 +54,11 @@ int main()
 	LED_update_score();
 
 	//Initialize the balls
-	reset_ball( &ballList[0] );
-	reset_ball( &ballList[1] );
-	ballList[0].enabled = true;
-	ballList[1].enabled = true;
+	for( i = 0; i < 10; i++ )
+	{
+		reset_ball( &ballList[i] );
+		ballList[i].enabled = true;
+	}
 
 	//Main game loop
 	while( game_active )
