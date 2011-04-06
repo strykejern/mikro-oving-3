@@ -55,6 +55,9 @@ int main()
 	i = 0;
 	while( game_active )
 	{
+		//Count number of frames
+		i++;
+
 		//Read input
 		read_input();
 
@@ -64,14 +67,14 @@ int main()
 		//Draw this frame
 		render_screen();
 
-		//Take it easy, relax a bit
-		usleep(SLEEP_PER_FRAME);	//30 frames per second
+		//See if one of the players have won
+		if( player1.score >= 4 || player2.score >= 4 )
+		{
+			game_active = false;
+		}
 
-		//Count number of frames
-		i++;
-
-		//Add a new ball every 10 seconds	(max ten balls)
-		if( i >= 10*FRAMES_PER_SECOND )
+		//Add a new ball every now and then (max ten balls)
+		if( i >= 7*FRAMES_PER_SECOND )
 		{
 			for( i = 0; i < MAX_BALLS; i++ )
 			{
@@ -81,7 +84,11 @@ int main()
 					break;
 				}
 			}
+			i = 0;	//reset counter
 		}
+
+		//Take it easy, relax a bit
+		usleep(SLEEP_PER_FRAME);	//30 frames per second
 	}
 
 	//Clear screen on exit
@@ -166,17 +173,17 @@ void reset_players()
 	//Player 1
 	player1.xPos = 0;
 	player1.yPos = 120-(PADDLE_HEIGHT/2);
-	player1.c.r = rand() % 255;
+	player1.c.r = 0;
 	player1.c.g = rand() % 255;
-	player1.c.b = rand() % 255;
+	player1.c.b = 255;
 	player1.score = 0;
 	
 	//Player 2
 	player2.xPos = 320-PADDLE_WIDTH;
 	player2.yPos = 120-(PADDLE_HEIGHT/2);
-	player2.c.r = rand() % 255;
-	player2.c.g = rand() % 255;
-	player2.c.b = rand() % 255;
+	player1.c.r = 255;
+	player1.c.g = rand() % 255;
+	player1.c.b = 0;
 	player2.score = 0;
 
 	//Reset score display
