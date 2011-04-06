@@ -40,7 +40,14 @@ void *threaded_music(void *arg)
 	return NULL;
 }
 
+void *threaded_effects(void *arg)
+{
+	play_sound(paddle);
+	return NULL;
+}
+
 pthread_t music_thread;
+pthread_t effects_thread;
 
 void initialize_sound_driver()
 {
@@ -96,7 +103,6 @@ void play_sound(FILE *sound_file)
 	}
 	
 	free(buffer);
-	fclose(sound_file);
 }
 
 void play_music()
@@ -110,20 +116,28 @@ void play_music()
 
 void sound_left_paddle()
 {
+	if( !paddle ) return;
 	
+	pthread_create( &effects_thread, NULL, threaded_effects, (void*)1 );
 }
 
 void sound_right_paddle()
 {
+	if( !paddle ) return;
 	
+	pthread_create( &effects_thread, NULL, threaded_effects, (void*)1 );
 }
 
 void sound_left_score()
 {
+	if( !paddle ) return;
 	
+	pthread_create( &effects_thread, NULL, threaded_effects, (void*)1 );
 }
 
 void sound_right_score()
 {
+	if( !paddle ) return;
 	
+	pthread_create( &effects_thread, NULL, threaded_effects, (void*)1 );
 }
