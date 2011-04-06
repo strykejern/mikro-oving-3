@@ -169,6 +169,8 @@ void render_screen()
 	draw_number( 40, 10, 1, player1.c );
 	draw_player_text( get_screen_width()-60, 10, player2.c );
 	draw_number( get_screen_width()-30, 10, 2, player2.c );
+	
+	draw_wins_text(100, 100, player2.c);
 
 	//Draw both paddles
 	draw_paddle( &player1 );
