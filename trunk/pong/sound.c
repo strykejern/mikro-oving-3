@@ -42,9 +42,14 @@ void *threaded_music(void *arg)
 	return NULL;
 }
 
+int waiting = 0;
+
 void *threaded_effects(void *arg)
 {
+	while (waiting);
+	waiting = 1;
 	play_sound(paddle);
+	waiting = 0;
 	return NULL;
 }
 
@@ -77,14 +82,14 @@ void play_sound(FILE *sound_file)
 	
 	if (buffer == NULL)
 	{
-		printf("Failed to allocate buffer, aborting sound");
+		printf("Failed to allocate buffer, aborting sound\n");
 		return;
 	}
 	
 	int bytes_read = fread( buffer, 1, BUFFER_SIZE, sound_file );
 	int bytes_written;
 	
-	printf("Starting sound loop");
+	printf("Starting sound loop\n");
 	while ( !feof(sound_file) ) // While not at EOF
 	{
 		if ( bytes_read )
@@ -98,7 +103,7 @@ void play_sound(FILE *sound_file)
 		}
 		else
 		{
-			printf("\nNo bytes read, BUG!\n");
+			printf("No bytes read, BUG!\n");
 		}
 		
 		bytes_read = fread( buffer, 1, BUFFER_SIZE, sound_file );
