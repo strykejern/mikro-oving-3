@@ -145,6 +145,20 @@ void draw_player_text(const int x, const int y, const COLOR c)
 	}
 }
 
+void draw_wins_text(const int x, const int y, const COLOR c)
+{
+	//10x34
+	int i, j;
+	for( j = 0; j < 10; ++j )
+	{
+		for( i = 0; i < 34; ++i )
+		{
+			if ( wins_bitmap[j][i] )
+				draw_one_pixel( x + i, y + j, c );
+		}
+	}
+}
+
 //Draw all the game components
 void render_screen()
 {
