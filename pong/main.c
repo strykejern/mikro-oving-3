@@ -55,11 +55,16 @@ int main()
 		{
 			//Intro screen
 			case STATE_INTRO_SCREEN:
+				//draw the intro screen
 				render_intro_screen();
-				input = BUTTONS();
+
 				//Button 4 is exit game, all the others are start
-				if(input & 8) quit_requested = true;
-				else if(input) game_state = STATE_NEW_GAME;
+				if( i >= 60 )
+				{
+					input = BUTTONS();
+					if(input & 8) quit_requested = true;
+					else if(input) game_state = STATE_NEW_GAME;
+				}
 			break;
 
 			//Fall through state to start new game
@@ -114,7 +119,9 @@ int main()
 	
 			//Win screen
 			case STATE_WINNING_SCREEN:
+				//draw victory screen
 				render_winning_screen( player1.score >= 4 ? 1 : 2 );
+
 				//wait a few frames before allowing to quit winning screen
 				if( i >= 60 && BUTTONS() ) game_state = STATE_INTRO_SCREEN;
 			break;
