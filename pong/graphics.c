@@ -228,16 +228,25 @@ void render_intro_screen()
 	int i, x, y;
 	COLOR c;
 	
-	for( i = 0; i < 10; i++ )
-	{
-		c.r = rand() % 255;
-		c.g = rand() % 255;
-		c.b = rand() % 255;
-		x = rand() % get_screen_width();
-		y = rand() % get_screen_height();
-		draw_pong_text(x, y, c);
-	}
+	c.r = rand() % 255;
+	c.g = rand() % 255;
+	c.b = rand() % 255;
+	draw_pong_text(get_screen_width()/2 - 100, get_screen_height()/2 - 50, c);
 
+	c.r = rand() % 255;
+	c.g = rand() % 255;
+	c.b = rand() % 255;
+	draw_pong_text(get_screen_width()/2 - 100, get_screen_height()/2 + 50, c);
+
+	c.r = rand() % 255;
+	c.g = rand() % 255;
+	c.b = rand() % 255;
+	draw_pong_text(get_screen_width()/2 + 100, get_screen_height()/2 + 50, c);
+
+	c.r = rand() % 255;
+	c.g = rand() % 255;
+	c.b = rand() % 255;
+	draw_pong_text(get_screen_width()/2 + 100, get_screen_height()/2 - 50, c);
 
 	//Show the result on the LCD
 	flip_buffers();
