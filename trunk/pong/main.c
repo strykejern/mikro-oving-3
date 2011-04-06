@@ -38,7 +38,7 @@ int main()
 
 	//Initialize the sound driver
 	initialize_sound_driver();
-	//play_music();
+	play_music();
 
 	//Initialize the players
 	reset_players();
