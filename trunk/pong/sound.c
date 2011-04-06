@@ -34,6 +34,8 @@ static FILE *paddle;
  RIGHT_SCORE
 } SOUND_EFFECT;*/
 
+void play_sound(FILE *sound_file);
+
 void *threaded_music(void *arg)
 {
 	play_sound(music);

@@ -2,6 +2,7 @@
 
 #include "pong.h"
 #include "physics.h"
+#include "sound.h"
 
 //Returns true if the specified paddle collides with the specified ball
 bool paddle_collides( paddle_t *whichPaddle, ball_t *whichBall )
@@ -36,11 +37,13 @@ void do_ball_collision( ball_t * whichBall )
 	{
 		whichBall->xSpeed = -whichBall->xSpeed + 1;
 		whichBall->xPos += whichBall->xSpeed;
+		sound_left_paddle();
 	}
 	else if( paddle_collides(&player2, whichBall) )
 	{
 		whichBall->xSpeed = -whichBall->xSpeed - 1;
 		whichBall->xPos += whichBall->xSpeed;
+		sound_left_paddle();
 	}
 
 	//Collide with all other balls!
