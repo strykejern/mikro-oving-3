@@ -1,4 +1,4 @@
-#include <math.h>	//for circle drawing
+#include <stdlib.h>	//for rand()
 
 #include "pong.h"
 #include "graphics.h"
@@ -35,6 +35,19 @@ static const bool wins_bitmap[10][34] = {
 	{0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,1,1,0,0,1,1,1,1,0,1,1,0,0,0,1,1},
 	{0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,1,1,0,0,0,1,1,1,0,1,1,0,0,0,1,1},
 	{0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,1,1,0,0,0,0,1,1,0,0,1,1,1,1,1,0},
+};
+
+static const bool pong_bitmap[10][34] = {
+	{1,1,1,1,0,0,0,1,1,1,0,0,1,1,1,0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,0,0,1,1},
+	{1,1,1,1,1,0,1,1,0,1,1,0,1,1,1,1,0,0,0,1,1,0,0,0,1,1,1,1,1,1,0,0,1,1},
+	{1,1,0,1,1,0,1,1,0,1,1,0,1,1,1,1,1,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,1,1},
+	{1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,1,1},
+	{1,1,1,1,1,0,1,1,0,1,1,0,1,1,0,0,1,1,0,1,1,0,0,1,1,0,0,1,1,1,1,0,1,1},
+	{1,1,1,0,0,0,1,1,0,1,1,0,1,1,0,0,0,1,1,1,1,0,0,1,1,0,0,1,1,1,1,0,1,1},
+	{1,1,0,0,0,0,1,1,0,1,1,0,1,1,0,0,0,1,1,1,1,0,0,1,1,1,0,0,0,1,1,0,0,0},
+	{1,1,0,0,0,0,1,1,0,1,1,0,1,1,0,0,0,0,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0},
+	{1,1,1,0,0,0,1,1,1,1,1,0,1,1,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,0,1,1},
+	{1,1,1,1,0,0,0,1,1,1,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,1,1,0,1,1},
 };
 
 static const bool numberBitmap[40][5] = {
@@ -161,6 +174,22 @@ void draw_wins_text(const int x, const int y, const COLOR c)
 	}
 }
 
+
+//Draws PONG on the screen
+void draw_pong_text(const int x, const int y, const COLOR c)
+{
+	//10x34
+	int i, j;
+	for( j = 0; j < 10; ++j )
+	{
+		for( i = 0; i < 34; ++i )
+		{
+			if ( pong_bitmap[j][i] )
+				draw_one_pixel( x + i, y + j, c );
+		}
+	}
+}
+
 //Draw all the game components
 void render_screen()
 {
@@ -193,14 +222,27 @@ void render_screen()
 	flip_buffers();
 }
 
+void render_intro_screen()
+{
+	COLOR c;
+	c.r = rand() % 255;
+	c.g = rand() % 255;
+	c.b = rand() % 255;
+
+	draw_pong_text(get_screen_width()/2-20, get_screen_height()/2-20, c);
+
+	//Show the result on the LCD
+	flip_buffers();
+}
+
 //Draw the victory screen
 void render_winning_screen( const short winningPlayer  )
 {	
 	COLOR c = winningPlayer == 1 ? player1.c : player2.c;
 	
-	draw_player_text(get_screen_width()/2-20, get_screen_height()/2, c);
-	draw_number(get_screen_width()/2-15, get_screen_height()/2, winningPlayer, c);
-	draw_wins_text(get_screen_width()/2-10, get_screen_height()/2+15, c);
+	draw_player_text(get_screen_width()/2-25, get_screen_height()/2, c);
+	draw_number(get_screen_width()/2-5, get_screen_height()/2, winningPlayer, c);
+	draw_wins_text(get_screen_width()/2-20, get_screen_height()/2+15, c);
 
 	//Show the result on the LCD
 	flip_buffers();

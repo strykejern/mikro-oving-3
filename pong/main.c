@@ -55,9 +55,10 @@ int main()
 		{
 			//Intro screen
 			case STATE_INTRO_SCREEN:
+				render_intro_screen();
 				input = BUTTONS();
 				//Button 4 is exit game, all the others are start
-				if(input & 7) quit_requested = true;
+				if(input & 8) quit_requested = true;
 				else if(input) game_state = STATE_NEW_GAME;
 			break;
 
@@ -107,7 +108,7 @@ int main()
 				if( player1.score >= 4 || player2.score >= 4 )
 				{
 					game_state = STATE_WINNING_SCREEN;
-					i = 0;
+					i = 0;	//reset counter;
 				}
 			break;
 	
