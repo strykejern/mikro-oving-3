@@ -104,7 +104,7 @@ int main()
 				}
 	
 				//See if a player has won
-				if( player1.score >= 4 && player2.score >= 4 )
+				if( player1.score >= 4 || player2.score >= 4 )
 				{
 					game_state = STATE_WINNING_SCREEN;
 					i = 0;
