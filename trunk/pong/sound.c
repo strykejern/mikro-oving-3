@@ -79,7 +79,6 @@ void start_sound(SOUND_EFFECT type)
 
 void play_sound(FILE *sound_file, int music)
 {
-	return;
 	fseek( sound_file, 0, SEEK_SET );
 	
 	short *buffer = malloc(BUFFER_SIZE * sizeof(short) + 1); // Allocate buffer
