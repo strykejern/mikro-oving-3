@@ -25,6 +25,7 @@ typedef struct paddle_s
 	char score;
 } paddle_t;
 
+//Ball structure
 typedef struct ball_s
 {
 	bool  enabled;
@@ -35,6 +36,17 @@ typedef struct ball_s
 	short xSpeed;
 	short ySpeed;
 } ball_t;
+
+//Game states
+typedef enum gamestate_e
+{
+	STATE_INTRO_SCREEN,
+	STATE_NEW_GAME,
+	STATE_PLAYING,
+	STATE_WINNING_SCREEN
+
+} GAME_STATE;
+
 
 //Global variables
 extern ball_t ballList[MAX_BALLS];
