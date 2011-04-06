@@ -59,7 +59,7 @@ int main()
 				render_intro_screen();
 
 				//Button 4 is exit game, all the others are start
-				if( i >= 60 )
+				if( i >= 50 )
 				{
 					input = BUTTONS();
 					if(input & 8) quit_requested = true;
