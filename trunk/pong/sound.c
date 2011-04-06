@@ -102,10 +102,8 @@ void play_sound(FILE *sound_file, int music)
 			{
 				buffer[i] /= LOWER_VOLUME;
 			}
-			while((waiting && music) || ((!music) && music_playing));
-			if(music) music_playing = 1;
+			while(waiting && music) usleep(10);
 			bytes_written = write( sound_driver, buffer, bytes_read );
-			if(music) music_playing = 0;
 		}
 		else
 		{
