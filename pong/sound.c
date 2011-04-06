@@ -12,7 +12,7 @@
 #include "driver_interface.h"
 #include "sound.h"
 
-static const int BUFFER_SIZE = 1024;
+static const int BUFFER_SIZE = 512;
 
 static const int LOWER_VOLUME = 1;
 
@@ -46,10 +46,7 @@ int waiting = 0;
 
 void *threaded_effects(void *arg)
 {
-	while (waiting);
-	waiting = 1;
 	play_sound(paddle, 0);
-	waiting = 0;
 	return NULL;
 }
 
@@ -101,8 +98,10 @@ void play_sound(FILE *sound_file, int music)
 			{
 				buffer[i] /= LOWER_VOLUME;
 			}
-			while(waiting && music);
+			while(waiting);
+			if (!music) waiting = 1;
 			bytes_written = write( sound_driver, buffer, bytes_read );
+			if (!music) waiting = 0;
 		}
 		else
 		{
