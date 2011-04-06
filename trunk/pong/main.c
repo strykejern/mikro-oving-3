@@ -190,3 +190,19 @@ void reset_players()
 	LED_update_score();
 }
 
+void remove_ball( ball_t *whichBall )
+{
+	int i;
+
+	//A ball hit the edges, remove it from game
+	whichBall->enabled = false;
+	reset_ball(whichBall);
+	LED_update_score();
+
+	//We need at least one ball to play!
+	for( i = 0; i < MAX_BALLS; i++ )
+	{
+		if( ballList[i].enabled ) break;
+	}
+	if( i == MAX_BALLS ) ballList[0].enabled = true;
+}

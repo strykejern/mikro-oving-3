@@ -50,7 +50,7 @@ void do_ball_collision( ball_t * whichBall )
 	for( i = 0; i < MAX_BALLS; i++ )
 	{
 		//Was this the last ball?
-		if( !ballList[i].enabled ) break;
+		if( !ballList[i].enabled ) continue;
 
 		//Dont collide with ourself!
 		if( &ballList[i] == whichBall ) continue;
@@ -96,15 +96,13 @@ void do_ball_collision( ball_t * whichBall )
 	{
 		//player 1 loses
 		player2.score++;
-		reset_ball(whichBall);
-		LED_update_score();
+		remove_ball(whichBall);
 	}
 	else if( whichBall->xPos+BALL_SIZE/2 >= get_screen_width() )
 	{
 		//player 2 loses
 		player1.score++;
-		reset_ball(whichBall);
-		LED_update_score();
+		remove_ball(whichBall);
 	}
 }
 
@@ -116,7 +114,7 @@ void update_physics()
 	//All active balls
 	for( i = 0; i < MAX_BALLS; i++ )
 	{
-		if( !ballList[i].enabled ) break;
+		if( !ballList[i].enabled ) continue;
 		do_ball_collision( &ballList[i] );
 	}	
 }
