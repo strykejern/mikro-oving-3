@@ -228,25 +228,47 @@ void render_intro_screen()
 	int i, x, y;
 	COLOR c;
 	
+	//Draw PONG!
 	c.r = rand() % 255;
 	c.g = rand() % 255;
 	c.b = rand() % 255;
-	draw_pong_text(get_screen_width()/2 - 100, get_screen_height()/2 - 50, c);
+	draw_pong_text(get_screen_width()/2 - 75, get_screen_height()/2 - 50, c);
 
 	c.r = rand() % 255;
 	c.g = rand() % 255;
 	c.b = rand() % 255;
-	draw_pong_text(get_screen_width()/2 - 100, get_screen_height()/2 + 50, c);
+	draw_pong_text(get_screen_width()/2 - 75, get_screen_height()/2 + 50, c);
 
 	c.r = rand() % 255;
 	c.g = rand() % 255;
 	c.b = rand() % 255;
-	draw_pong_text(get_screen_width()/2 + 100, get_screen_height()/2 + 50, c);
+	draw_pong_text(get_screen_width()/2 + 75, get_screen_height()/2 + 25, c);
 
 	c.r = rand() % 255;
 	c.g = rand() % 255;
 	c.b = rand() % 255;
-	draw_pong_text(get_screen_width()/2 + 100, get_screen_height()/2 - 50, c);
+	draw_pong_text(get_screen_width()/2 + 75, get_screen_height()/2 - 50, c);
+
+	//Draw some balls
+	int xPos = get_screen_width()/2 - BALL_SIZE/2;
+	int yPos = get_screen_height()/2 - BALL_SIZE/2;
+	for( i = 0; i < 10; i++ )
+	{
+		COLOR c;
+
+		c.r = rand() % 255;
+		c.g = rand() % 255;
+		c.b = rand() % 255;
+
+		for( x = 0; x < BALL_SIZE; x++ )
+		{
+			for( y = 0; y < BALL_SIZE; y++ )
+			{
+				if( ballBitmap[x][y] ) 
+					draw_one_pixel(xPos+i*BALL_SIZE, yPos+i*BALL_SIZE, c );
+			}
+		}
+	}
 
 	//Show the result on the LCD
 	flip_buffers();
