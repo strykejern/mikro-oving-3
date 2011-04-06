@@ -132,6 +132,7 @@ void draw_ball( ball_t *whichBall )
 	whichBall->oldYPos = whichBall->yPos;
 }
 
+//Draws PLAYER on the screen
 void draw_player_text(const int x, const int y, const COLOR c)
 {
 	int i;
@@ -145,6 +146,7 @@ void draw_player_text(const int x, const int y, const COLOR c)
 	}
 }
 
+//Draws WIN on the screen
 void draw_wins_text(const int x, const int y, const COLOR c)
 {
 	//10x34
@@ -170,8 +172,6 @@ void render_screen()
 	draw_player_text( get_screen_width()-60, 10, player2.c );
 	draw_number( get_screen_width()-30, 10, 2, player2.c );
 	
-	draw_wins_text(100, 100, player2.c);
-
 	//Draw both paddles
 	draw_paddle( &player1 );
 	draw_paddle( &player2 );
@@ -179,15 +179,8 @@ void render_screen()
 	//Draw player 1 score
 	draw_number( (get_screen_width()/2)-15, 10, player1.score, player1.c );
 
-	//Draw a line between scores
-	for( i = (get_screen_width()/2)-5; i < 10; i++ )
-	{
-		draw_one_pixel(i, 5, COLOR_WHITE);
-	}
-
 	//Draw player 2 score
 	draw_number( (get_screen_width()/2)+15, 10, player2.score, player2.c );
-
 
 	//Draw all active balls
 	for( i = 0; i < MAX_BALLS; i++ )
@@ -195,6 +188,19 @@ void render_screen()
 		if( !ballList[i].enabled ) continue;
 		draw_ball( &ballList[i] );
 	}
+
+	//Show the result on the LCD
+	flip_buffers();
+}
+
+//Draw the victory screen
+void render_winning_screen( const short winningPlayer  )
+{	
+	COLOR c = winningPlayer == 1 ? player1.c : player2.c;
+	
+	draw_player_text(get_screen_width()/2-20, get_screen_height()/2, c);
+	draw_number(get_screen_width()/2-15, get_screen_height()/2, winningPlayer, c);
+	draw_wins_text(get_screen_width()/2-10, get_screen_height()/2+15, c);
 
 	//Show the result on the LCD
 	flip_buffers();
