@@ -227,12 +227,34 @@ void render_intro_screen()
 {
 	int i, x, y;
 	COLOR c;
+	
+	for( i = 0; i < 10; i++ )
+	{
+		c.r = rand() % 255;
+		c.g = rand() % 255;
+		c.b = rand() % 255;
+		x = 40 + (rand() % get_screen_width() - 60);
+		y = 40 + (rand() % get_screen_height() - 60);
+		draw_pong_text(x, y, c);
+	}
+
+
+	//Show the result on the LCD
+	flip_buffers();
+}
+
+//Draw the victory screen
+void render_winning_screen( const short winningPlayer  )
+{	
+	int i, x ,y;
+	COLOR c;
 
 	//Draw some random dots
 	for( i = 0; i < 10; i++ )
 	{
-		int xPos = BALL_SIZE/2 + rand() % (get_screen_width()-BALL_SIZE/2);
-		int yPos = BALL_SIZE/2 + rand() % (get_screen_height()-BALL_SIZE/2);
+		int xPos = BALL_SIZE + rand() % (get_screen_width()-BALL_SIZE*2);
+		int yPos = BALL_SIZE + rand() % (get_screen_height()-BALL_SIZE*2);
+		COLOR c;
 
 		c.r = rand() % 255;
 		c.g = rand() % 255;
@@ -248,23 +270,10 @@ void render_intro_screen()
 		}
 	}
 
-	c.r = rand() % 255;
-	c.g = rand() % 255;
-	c.b = rand() % 255;
-	draw_pong_text(get_screen_width()/2-20, get_screen_height()/2-20, c);
-
-
-	//Show the result on the LCD
-	flip_buffers();
-}
-
-//Draw the victory screen
-void render_winning_screen( const short winningPlayer  )
-{	
-	COLOR c = winningPlayer == 1 ? player1.c : player2.c;
-	
+	//Draw Player X wins!
+	c = winningPlayer == 1 ? player1.c : player2.c;
 	draw_player_text(get_screen_width()/2-25, get_screen_height()/2, c);
-	draw_number(get_screen_width()/2-5, get_screen_height()/2, winningPlayer, c);
+	draw_number(get_screen_width()/2+10, get_screen_height()/2, winningPlayer, c);
 	draw_wins_text(get_screen_width()/2-20, get_screen_height()/2+15, c);
 
 	//Show the result on the LCD
