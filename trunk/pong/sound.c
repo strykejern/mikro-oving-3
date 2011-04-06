@@ -43,10 +43,14 @@ void *threaded_music(void *arg)
 }
 
 int waiting = 0;
+int music_playing = 0;
 
 void *threaded_effects(void *arg)
 {
+	while (waiting);
+	waiting = 1;
 	play_sound(paddle, 0);
+	waiting = 0;
 	return NULL;
 }
 
@@ -98,10 +102,10 @@ void play_sound(FILE *sound_file, int music)
 			{
 				buffer[i] /= LOWER_VOLUME;
 			}
-			while(waiting);
-			if (!music) waiting = 1;
+			while((waiting && music) || ((!music) && music_playing));
+			if(music) music_playing = 1;
 			bytes_written = write( sound_driver, buffer, bytes_read );
-			if (!music) waiting = 0;
+			if(music) music_playing = 0;
 		}
 		else
 		{
