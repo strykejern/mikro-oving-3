@@ -222,14 +222,37 @@ void render_screen()
 	flip_buffers();
 }
 
+//Draw intro screen
 void render_intro_screen()
 {
+	int i, x, y;
 	COLOR c;
+
+	//Draw some random dots
+	for( i = 0; i < 10; i++ )
+	{
+		int xPos = BALL_SIZE/2 + rand() % (get_screen_width()-BALL_SIZE/2);
+		int yPos = BALL_SIZE/2 + rand() % (get_screen_height()-BALL_SIZE/2);
+
+		c.r = rand() % 255;
+		c.g = rand() % 255;
+		c.b = rand() % 255;
+
+		for( x = 0; x < BALL_SIZE; x++ )
+		{
+			for( y = 0; y < BALL_SIZE; y++ )
+			{
+				if( ballBitmap[x][y] ) 
+					draw_one_pixel(xPos+x-BALL_SIZE/2, yPos+y-BALL_SIZE/2, c );
+			}
+		}
+	}
+
 	c.r = rand() % 255;
 	c.g = rand() % 255;
 	c.b = rand() % 255;
-
 	draw_pong_text(get_screen_width()/2-20, get_screen_height()/2-20, c);
+
 
 	//Show the result on the LCD
 	flip_buffers();
