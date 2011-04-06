@@ -34,11 +34,11 @@ static FILE *paddle;
  RIGHT_SCORE
 } SOUND_EFFECT;*/
 
-void play_sound(FILE *sound_file);
+void play_sound(FILE *sound_file, int music);
 
 void *threaded_music(void *arg)
 {
-	play_sound(music);
+	play_sound(music, 1);
 	return NULL;
 }
 
@@ -48,7 +48,7 @@ void *threaded_effects(void *arg)
 {
 	while (waiting);
 	waiting = 1;
-	play_sound(paddle);
+	play_sound(paddle, 0);
 	waiting = 0;
 	return NULL;
 }
@@ -76,7 +76,7 @@ void start_sound(SOUND_EFFECT type)
 	
 }*/
 
-void play_sound(FILE *sound_file)
+void play_sound(FILE *sound_file, int music)
 {
 	fseek( sound_file, 0, SEEK_SET );
 	
@@ -101,7 +101,7 @@ void play_sound(FILE *sound_file)
 			{
 				buffer[i] /= LOWER_VOLUME;
 			}
-			while(waiting && bytes_read == BUFFER_SIZE);
+			while(waiting && music);
 			bytes_written = write( sound_driver, buffer, bytes_read );
 		}
 		else
