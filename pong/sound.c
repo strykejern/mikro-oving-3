@@ -92,7 +92,6 @@ void play_sound(FILE *sound_file, int music)
 	int bytes_read = fread( buffer, 1, BUFFER_SIZE, sound_file );
 	int bytes_written;
 	
-	printf("Starting sound loop\n");
 	while ( !feof(sound_file) ) // While not at EOF
 	{
 		if ( bytes_read )
@@ -102,7 +101,7 @@ void play_sound(FILE *sound_file, int music)
 			{
 				buffer[i] /= LOWER_VOLUME;
 			}
-			while(waiting && music) usleep(10);
+			while(waiting && music);
 			bytes_written = write( sound_driver, buffer, bytes_read );
 		}
 		else
