@@ -63,8 +63,10 @@ void initialize_sound_driver()
 	sound_driver = open("/dev/dsp", O_WRONLY); // Loading the linux sound driver
 
 	music = fopen("09-the-moon.au", "r"); // Loading music file
+	if (!music) printf("Failed to load music\n");
 	
 	paddle = fopen("sound46.au", "r"); // Loading sound effect
+	if (!paddle) printf("Failed to load sound effect\n");
 	
 	printf("ioctl... ");
 	ioctl( sound_driver, SOUND_PCM_WRITE_RATE, &SAMPLE_RATE );
