@@ -12,7 +12,7 @@
 #include "driver_interface.h"
 #include "sound.h"
 
-static const int BUFFER_SIZE = 2048 * 8;
+static const int BUFFER_SIZE = 1024;
 
 static const int LOWER_VOLUME = 1;
 
