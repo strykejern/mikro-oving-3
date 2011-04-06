@@ -181,9 +181,9 @@ void reset_players()
 	//Player 2
 	player2.xPos = 320-PADDLE_WIDTH;
 	player2.yPos = 120-(PADDLE_HEIGHT/2);
-	player1.c.r = 255;
-	player1.c.g = rand() % 255;
-	player1.c.b = 0;
+	player2.c.r = 255;
+	player2.c.g = rand() % 255;
+	player2.c.b = 0;
 	player2.score = 0;
 
 	//Reset score display
