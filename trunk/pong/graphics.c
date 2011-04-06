@@ -250,9 +250,9 @@ void render_intro_screen()
 	draw_pong_text(get_screen_width()/2 + 75, get_screen_height()/2 - 50, c);
 
 	//Draw some balls
-	int xPos = get_screen_width()/2 - BALL_SIZE*5;
+	int xPos = get_screen_width()/2 - BALL_SIZE*8;
 	int yPos = get_screen_height()/2 - BALL_SIZE/2;
-	for( i = 0; i < 10; i++ )
+	for( i = 0; i < 16; i++ )
 	{
 		COLOR c;
 		xPos += BALL_SIZE;
@@ -266,7 +266,7 @@ void render_intro_screen()
 			for( y = 0; y < BALL_SIZE; y++ )
 			{
 				if( ballBitmap[x][y] ) 
-					draw_one_pixel(xPos+x+i, yPos+y+i, c );
+					draw_one_pixel(xPos+x+i, yPos+y, c );
 			}
 		}
 	}
