@@ -15,6 +15,9 @@ static int bytes_per_pixel;
 
 void draw_one_pixel(const short x, const short y, COLOR color )
 {
+	//Prevent segfaults when drawing outside the screen
+	if( x < 0 || y < 0 || x > screen_width || y > screen_width ) return;
+
 	int index = (x * 4) + (y * 1280);
 	buffer[index + 0] = color.a;		//A
 	buffer[index + 1] = color.b;		//B
