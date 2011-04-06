@@ -233,8 +233,8 @@ void render_intro_screen()
 		c.r = rand() % 255;
 		c.g = rand() % 255;
 		c.b = rand() % 255;
-		x = 100 + get_screen_width()/2 - (rand() % 100);
-		y = 50 + get_screen_height()/2 - (rand() % 50);
+		x = rand() % get_screen_width();
+		y = rand() % get_screen_height();
 		draw_pong_text(x, y, c);
 	}
 
