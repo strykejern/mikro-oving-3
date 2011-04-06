@@ -36,7 +36,7 @@ static FILE *paddle;
 
 void *threaded_music(void *arg)
 {
-	play_music();
+	play_sound(music);
 	return NULL;
 }
 
@@ -106,7 +106,6 @@ void play_music()
 	printf("Playing music\n");
 	
 	pthread_create( &music_thread, NULL, threaded_music, (void*)0 );
-	play_sound(music);
 }
 
 void sound_left_paddle()
