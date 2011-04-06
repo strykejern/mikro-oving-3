@@ -44,13 +44,15 @@ int main()
 	reset_players();
 
 	//Initialize the balls
-	for( i = 0; i < 5; i++ )
+	for( i = 0; i < MAX_BALLS; i++ )
 	{
 		reset_ball( &ballList[i] );
-		ballList[i].enabled = true;
+		ballList[i].enabled = false;
 	}
+	ballList[0].enabled = true;
 
 	//Main game loop
+	i = 0;
 	while( game_active )
 	{
 		//Read input
@@ -64,6 +66,22 @@ int main()
 
 		//Take it easy, relax a bit
 		usleep(SLEEP_PER_FRAME);	//30 frames per second
+
+		//Count number of frames
+		i++;
+
+		//Add a new ball every 10 seconds	(max ten balls)
+		if( i >= 10*FRAMES_PER_SECOND )
+		{
+			for( i = 0; i < MAX_BALLS; i++ )
+			{
+				if( !ballList[i].enabled )
+				{
+					ballList[i].enabled = true;
+					break;
+				}
+			}
+		}
 	}
 
 	//Clear screen on exit
@@ -148,17 +166,17 @@ void reset_players()
 	//Player 1
 	player1.xPos = 0;
 	player1.yPos = 120-(PADDLE_HEIGHT/2);
-	player1.c.r = 255;
-	player1.c.g = 0;
-	player1.c.b = 0;
+	player1.c.r = rand() % 255;
+	player1.c.g = rand() % 255;
+	player1.c.b = rand() % 255;
 	player1.score = 0;
 	
 	//Player 2
 	player2.xPos = 320-PADDLE_WIDTH;
 	player2.yPos = 120-(PADDLE_HEIGHT/2);
-	player2.c.r = 255;
-	player2.c.g = 255;
-	player2.c.b = 0;
+	player2.c.r = rand() % 255;
+	player2.c.g = rand() % 255;
+	player2.c.b = rand() % 255;
 	player2.score = 0;
 
 	//Reset score display
