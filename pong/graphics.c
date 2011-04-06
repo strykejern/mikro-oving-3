@@ -190,7 +190,7 @@ void render_screen()
 	//Draw all active balls
 	for( i = 0; i < MAX_BALLS; i++ )
 	{
-		if( !ballList[i].enabled ) break;
+		if( !ballList[i].enabled ) continue;
 		draw_ball( &ballList[i] );
 	}
 

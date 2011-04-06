@@ -43,6 +43,7 @@ extern paddle_t player2;
 
 //Public functions
 void reset_ball( ball_t *whichBall );
+void remove_ball( ball_t *whichBall );
 void reset_players();
 void LED_update_score();
 
