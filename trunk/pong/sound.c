@@ -101,7 +101,7 @@ void play_sound(FILE *sound_file)
 			{
 				buffer[i] /= LOWER_VOLUME;
 			}
-			while(waiting);
+			while(waiting && bytes_read == BUFFER_SIZE);
 			bytes_written = write( sound_driver, buffer, bytes_read );
 		}
 		else
