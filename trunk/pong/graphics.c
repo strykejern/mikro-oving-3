@@ -242,7 +242,7 @@ void render_intro_screen()
 	c.r = rand() % 255;
 	c.g = rand() % 255;
 	c.b = rand() % 255;
-	draw_pong_text(get_screen_width()/2 + 75, get_screen_height()/2 + 25, c);
+	draw_pong_text(get_screen_width()/2 + 75, get_screen_height()/2 + 50, c);
 
 	c.r = rand() % 255;
 	c.g = rand() % 255;
@@ -250,11 +250,12 @@ void render_intro_screen()
 	draw_pong_text(get_screen_width()/2 + 75, get_screen_height()/2 - 50, c);
 
 	//Draw some balls
-	int xPos = get_screen_width()/2 - BALL_SIZE/2;
+	int xPos = get_screen_width()/2 - BALL_SIZE*5;
 	int yPos = get_screen_height()/2 - BALL_SIZE/2;
 	for( i = 0; i < 10; i++ )
 	{
 		COLOR c;
+		xPos += BALL_SIZE;
 
 		c.r = rand() % 255;
 		c.g = rand() % 255;
@@ -265,7 +266,7 @@ void render_intro_screen()
 			for( y = 0; y < BALL_SIZE; y++ )
 			{
 				if( ballBitmap[x][y] ) 
-					draw_one_pixel(xPos+i*BALL_SIZE, yPos+i*BALL_SIZE, c );
+					draw_one_pixel(xPos+x+i, yPos+y+i, c );
 			}
 		}
 	}
