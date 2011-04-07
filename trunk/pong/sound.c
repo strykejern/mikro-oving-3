@@ -31,10 +31,8 @@ static bool waiting = false; // Indicates wether a sound effect is currently pla
 // Thread for the music
 void *threaded_music(void *arg)
 {
-	while(true) {
-		printf("one\n");
-		play_sound(music, 1);
-	}
+	while(true) play_sound(music, 1);
+
 	return NULL;
 }
 
