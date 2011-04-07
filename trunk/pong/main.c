@@ -123,7 +123,11 @@ int main()
 				render_winning_screen( player1.score >= 4 ? 1 : 2 );
 
 				//wait a few frames before allowing to quit winning screen
-				if( i >= 60 && BUTTONS() ) game_state = STATE_INTRO_SCREEN;
+				if( i >= 60 && BUTTONS() ) 
+				{
+					game_state = STATE_INTRO_SCREEN;
+					usleep(750*1000);
+				}
 			break;
 		}
 
@@ -231,6 +235,7 @@ void reset_players()
 	LED_update_score();
 }
 
+//Removes a ball from game, makes sure there is at least one ball ingame
 void remove_ball( ball_t *whichBall )
 {
 	int i;

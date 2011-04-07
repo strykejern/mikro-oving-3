@@ -24,6 +24,7 @@ bool ball_collides( ball_t *firstBall, ball_t *secondBall )
 	return false;
 }
 
+//Handles collisions for one ball
 void do_ball_collision( ball_t * whichBall )
 {
 	int i = 0;
@@ -37,13 +38,13 @@ void do_ball_collision( ball_t * whichBall )
 	{
 		whichBall->xSpeed = -whichBall->xSpeed + 1;
 		whichBall->xPos += whichBall->xSpeed;
-		sound_left_paddle();
+		sound_hit_paddle();
 	}
 	else if( paddle_collides(&player2, whichBall) )
 	{
 		whichBall->xSpeed = -whichBall->xSpeed - 1;
 		whichBall->xPos += whichBall->xSpeed;
-		sound_left_paddle();
+		sound_hit_paddle();
 	}
 
 	//Collide with all other balls!
