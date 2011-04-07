@@ -6,6 +6,7 @@
 
 static int driver;
 
+//Initializes the custom drivers
 void initialize_driver()
 {
         // Opening the driver file
@@ -14,6 +15,7 @@ void initialize_driver()
 	if (driver == -1) printf("DRIVER FAIL!");
 }
 
+//Sets which LEDS should be lighted
 void LEDS ( int enable )
 {
 	int leds = enable;
@@ -24,6 +26,7 @@ void LEDS ( int enable )
 	bytes_written = write( driver, &leds, sizeof(leds) );
 }
 
+//Returns the bits for which buttons have been pressed
 int BUTTONS ()
 {
 	int buttons;

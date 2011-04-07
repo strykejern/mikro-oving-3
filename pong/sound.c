@@ -1,10 +1,9 @@
 #include <fcntl.h>			//for open()
-#include <stdlib.h>
+#include <stdlib.h>			//for memory allocation
 #include <stdio.h>			//for printf()
-#include <string.h>			//for memcpy()
-#include <unistd.h>			//For sleep
-#include <time.h>			//For random seed
-#include <pthread.h>
+#include <pthread.h>			//for multithreading
+#include <stdbool.h>			//boolean type
+#include <unistd.h>			//for read and write
 
 #include <linux/soundcard.h>
 #include <sys/ioctl.h>
@@ -12,6 +11,7 @@
 #include "driver_interface.h"
 #include "sound.h"
 
+//Private variables
 static const int BUFFER_SIZE = 512; // Buffer size for the play_sound function
 
 static int SAMPLE_RATE = 22050;     // Sample rate to be set by ioctl
@@ -20,34 +20,39 @@ static int BITRATE = 16;            // Bitrate to be set by ioctl
 
 static int sound_driver;
 
-static FILE *music;
+static FILE *music;		    //Music
 
-static FILE *paddle;
+static FILE *paddle;		    //sound effect for hitting paddle
 
 void play_sound(FILE *sound_file, int music);
+
+static bool waiting = false; // Indicates wether a sound effect is currently playing
 
 // Thread for the music
 void *threaded_music(void *arg)
 {
-	play_sound(music, 1);
+	while(true) {
+		printf("one\n");
+		play_sound(music, 1);
+	}
 	return NULL;
 }
 
-int waiting = 0; // Indicates wether a sound effect is currently playing
 
 // Thread for the sound-effect
 void *threaded_effects(void *arg)
 {
 	while (waiting);        // Waiting for other sound-effects to finish
-	waiting = 1;            // Indicate that we are playing a sound effect
+	waiting = true;            // Indicate that we are playing a sound effect
 	play_sound(paddle, 0);  // Play a sound effect
-	waiting = 0;            // Indicate that we are done playing
+	waiting = false;            // Indicate that we are done playing
 	return NULL;
 }
 
 pthread_t music_thread;
 pthread_t effects_thread;
 
+//Opens and initializes the sound driver
 void initialize_sound_driver()
 {
 	printf("Initializing the sound driver\n");
@@ -66,12 +71,8 @@ void initialize_sound_driver()
 	ioctl( sound_driver, SOUND_PCM_WRITE_BITS, &BITRATE );
 	printf("done\n");
 }
-/*
-void start_sound(SOUND_EFFECT type)
-{
-	
-}*/
 
+//Starts playing a sound, this is usually done in it's own thread
 void play_sound(FILE *sound_file, int music)
 {
         // Always seek to the start of the sound-file
@@ -113,6 +114,7 @@ void play_sound(FILE *sound_file, int music)
 	free(buffer);
 }
 
+//Start playing background music in it's own thread
 void play_music()
 {
 	if( !music ) return;
@@ -123,10 +125,8 @@ void play_music()
 	pthread_create( &music_thread, NULL, threaded_music, (void*)0 );
 }
 
-// Functions meant to play different sound-effects, but lack of time lead
-// to them all just playing the same effect
-
-void sound_left_paddle()
+//Sound effect to play when a ball hits a paddle (done in it's own thread)
+void sound_hit_paddle()
 {
 	if( !paddle ) return;
 
@@ -134,26 +134,3 @@ void sound_left_paddle()
 	pthread_create( &effects_thread, NULL, threaded_effects, (void*)1 );
 }
 
-void sound_right_paddle()
-{
-	if( !paddle ) return;
-
-        // Spawn thread playing sound-effect
-	pthread_create( &effects_thread, NULL, threaded_effects, (void*)1 );
-}
-
-void sound_left_score()
-{
-	if( !paddle ) return;
-
-        // Spawn thread playing sound-effect
-	pthread_create( &effects_thread, NULL, threaded_effects, (void*)1 );
-}
-
-void sound_right_score()
-{
-	if( !paddle ) return;
-
-        // Spawn thread playing sound-effect
-	pthread_create( &effects_thread, NULL, threaded_effects, (void*)1 );
-}

@@ -13,6 +13,7 @@ static int screen_height;
 static int screen_bytes;
 static int bytes_per_pixel;
 
+//Draws a single pixel on the LCD
 void draw_one_pixel(const short x, const short y, COLOR color )
 {
 	//Prevent segfaults when drawing outside the screen
@@ -25,6 +26,7 @@ void draw_one_pixel(const short x, const short y, COLOR color )
 	buffer[index + 3] = color.r;		//R
 }
 
+//Opens the video driver with the specified screen width, height and depth
 void initialize_video( const int width, const int height, const int depth )
 {
 	int file;
@@ -65,11 +67,13 @@ void flip_buffers()
 	memset( buffer, 0, screen_bytes );
 }
 
+//Returns the screen width
 int get_screen_width()
 {
 	return screen_width;
 }
 
+//Returns the screen height
 int get_screen_height()
 {
 	return screen_height;
